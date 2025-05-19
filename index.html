@@ -27,6 +27,7 @@
             background-color: var(--white);
             color: var(--black);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
@@ -37,10 +38,9 @@
         
         /* Announcement Bar */
         .announcement-bar {
-            background-color: var(--black);
-            color: var(--gold);
-            padding: 10px 0;
-            text-align: center;
+            background-color: var(--gold);
+            color: var(--white);
+            padding: 12px 0;
             position: fixed;
             width: 100%;
             top: 0;
@@ -48,21 +48,39 @@
             overflow: hidden;
         }
         
-        .announcement-content {
-            display: inline-block;
-            white-space: nowrap;
-            animation: scrollText 30s linear infinite;
+        .announcement-slider {
+            display: flex;
+            width: 300%;
+            transition: transform 0.5s ease;
         }
         
-        @keyframes scrollText {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        
-        .announcement-text {
-            display: inline-block;
-            padding: 0 50px;
+        .announcement-slide {
+            flex: 1;
+            text-align: center;
+            min-width: 100%;
             font-weight: 600;
+            white-space: nowrap;
+            padding: 0 20px;
+        }
+        
+        .announcement-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        
+        .announcement-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            margin: 0 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .announcement-dot.active {
+            background-color: var(--white);
         }
         
         /* Header Styles */
@@ -114,6 +132,29 @@
         
         nav ul li a:hover {
             color: var(--gold);
+        }
+        
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .login-button {
+            background-color: transparent;
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .login-button:hover {
+            background-color: var(--gold);
+            color: var(--black);
         }
         
         .cta-button {
@@ -389,6 +430,27 @@
             margin-bottom: 15px;
         }
         
+        .payment-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .payment-badge {
+            width: 50px;
+            height: 30px;
+            object-fit: contain;
+            filter: grayscale(30%);
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+        
+        .payment-badge:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
         /* CTA Section */
         .cta-section {
             padding: 100px 0;
@@ -593,6 +655,10 @@
                 margin: 0 10px 10px;
             }
             
+            .header-buttons {
+                margin-top: 20px;
+            }
+            
             .hero {
                 padding-top: 160px;
             }
@@ -614,8 +680,8 @@
                 grid-template-columns: 1fr;
             }
             
-            .announcement-content {
-                animation: scrollText 15s linear infinite;
+            .announcement-slide {
+                white-space: normal;
             }
         }
         
@@ -640,12 +706,15 @@
 <body>
     <!-- Announcement Bar -->
     <div class="announcement-bar">
-        <div class="announcement-content">
-            <span class="announcement-text">🔥 Limited Time Offer: Get 1 Week Free Trial - Offer Ends at Midnight!</span>
-            <span class="announcement-text">🚀 AI-Generated Bible Insights - Learn the Truth in Seconds!</span>
-            <span class="announcement-text">❤️ We Donate 15% of Proceeds to Churches Worldwide</span>
-            <span class="announcement-text">📖 Unlimited Bible Answers for Just $19.99/month</span>
-            <span class="announcement-text">⏰ Special 20% Off Annual Plan - Join Today!</span>
+        <div class="announcement-slider" id="announcementSlider">
+            <div class="announcement-slide">🌟 Get 1 Week Free Trial - No Credit Card Required</div>
+            <div class="announcement-slide">❤️ 15% of All Proceeds Donated to Churches</div>
+            <div class="announcement-slide">⏰ Special Offer Ends at Midnight!</div>
+        </div>
+        <div class="announcement-dots" id="announcementDots">
+            <div class="announcement-dot active" data-index="0"></div>
+            <div class="announcement-dot" data-index="1"></div>
+            <div class="announcement-dot" data-index="2"></div>
         </div>
     </div>
 
@@ -662,7 +731,10 @@
                     <li><a href="#pricing">Pricing</a></li>
                 </ul>
             </nav>
-            <button class="cta-button" id="header-cta">Get Free Trial</button>
+            <div class="header-buttons">
+                <a href="login.html" class="login-button">Login</a>
+                <button class="cta-button" id="header-cta">Get Started</button>
+            </div>
         </div>
     </header>
 
@@ -795,7 +867,13 @@
                         <li>Daily insights</li>
                         <li>Priority support</li>
                     </ul>
-                    <button class="cta-button">Start Free Trial</button>
+                    <a href="payment.html?plan=monthly" class="cta-button">Start Free Trial</a>
+                    <div class="payment-badges">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visa/visa-original.svg" class="payment-badge" alt="Visa">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mastercard/mastercard-original.svg" class="payment-badge" alt="Mastercard">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" class="payment-badge" alt="Apple Pay">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/paypal/paypal-original.svg" class="payment-badge" alt="PayPal">
+                    </div>
                 </div>
                 <div class="pricing-card">
                     <h3>Yearly Plan</h3>
@@ -810,7 +888,13 @@
                         <li>Extended support hours</li>
                         <li>Special member badge</li>
                     </ul>
-                    <button class="cta-button">Start Free Trial</button>
+                    <a href="payment.html?plan=yearly" class="cta-button">Start Free Trial</a>
+                    <div class="payment-badges">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visa/visa-original.svg" class="payment-badge" alt="Visa">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mastercard/mastercard-original.svg" class="payment-badge" alt="Mastercard">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" class="payment-badge" alt="Apple Pay">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/paypal/paypal-original.svg" class="payment-badge" alt="PayPal">
+                    </div>
                 </div>
             </div>
         </div>
@@ -844,7 +928,6 @@
                         <li><a href="#features">Features</a></li>
                         <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#">Blog</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -887,23 +970,75 @@
     </div>
 
     <script>
-        // Announcement bar text cycling
-        const announcementTexts = [
-            "🔥 Limited Time Offer: Get 1 Week Free Trial - Offer Ends at Midnight!",
-            "🚀 AI-Generated Bible Insights - Learn the Truth in Seconds!",
-            "❤️ We Donate 15% of Proceeds to Churches Worldwide",
-            "📖 Unlimited Bible Answers for Just $19.99/month",
-            "⏰ Special 20% Off Annual Plan - Join Today!"
-        ];
+        // Announcement bar functionality
+        const announcementSlider = document.getElementById('announcementSlider');
+        const announcementDots = document.getElementById('announcementDots');
+        const dots = announcementDots.querySelectorAll('.announcement-dot');
+        let currentSlide = 0;
+        const totalSlides = 3;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let autoSlideInterval;
         
-        const announcementContent = document.querySelector('.announcement-content');
+        function goToSlide(index) {
+            currentSlide = index;
+            announcementSlider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
         
-        // Duplicate texts for seamless looping
-        announcementContent.innerHTML = announcementTexts.map(text => 
-            `<span class="announcement-text">${text}</span>`
-        ).join('') + announcementTexts.map(text => 
-            `<span class="announcement-text">${text}</span>`
-        ).join('');
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }
+        
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 4000);
+        }
+        
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+        
+        // Initialize
+        startAutoSlide();
+        
+        // Dot navigation
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideIndex = parseInt(dot.getAttribute('data-index'));
+                goToSlide(slideIndex);
+                stopAutoSlide();
+                startAutoSlide();
+            });
+        });
+        
+        // Touch events for swipe
+        announcementSlider.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            stopAutoSlide();
+        }, {passive: true});
+        
+        announcementSlider.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+            startAutoSlide();
+        }, {passive: true});
+        
+        function handleSwipe() {
+            const difference = touchStartX - touchEndX;
+            if (difference > 50) {
+                // Swipe left - next slide
+                nextSlide();
+            } else if (difference < -50) {
+                // Swipe right - previous slide
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                goToSlide(currentSlide);
+            }
+        }
         
         // Modal functionality
         const modal = document.getElementById('signup-modal');
@@ -911,9 +1046,13 @@
         const closeModal = document.querySelector('.close-modal');
         
         openModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+            button.addEventListener('click', (e) => {
+                // Check if the button is not a link
+                if (button.tagName !== 'A') {
+                    e.preventDefault();
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
             });
         });
         
