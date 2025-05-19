@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bible AI - Learn the Truth About the Bible</title>
+    <title>Bible AI - Learn the Truth About the Bible in Seconds</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -35,6 +35,36 @@
             padding: 0 20px;
         }
         
+        /* Announcement Bar */
+        .announcement-bar {
+            background-color: var(--black);
+            color: var(--gold);
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1100;
+            overflow: hidden;
+        }
+        
+        .announcement-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scrollText 30s linear infinite;
+        }
+        
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .announcement-text {
+            display: inline-block;
+            padding: 0 50px;
+            font-weight: 600;
+        }
+        
         /* Header Styles */
         header {
             background-color: var(--black);
@@ -42,7 +72,7 @@
             padding: 20px 0;
             position: fixed;
             width: 100%;
-            top: 0;
+            top: 40px;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
@@ -111,7 +141,7 @@
             align-items: center;
             text-align: center;
             color: var(--white);
-            padding-top: 80px;
+            padding-top: 120px;
         }
         
         .hero-content {
@@ -217,53 +247,10 @@
             color: var(--dark-gray);
         }
         
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 0;
-            background-color: var(--white);
-        }
-        
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
-        
-        .step-number {
-            background-color: var(--gold);
-            color: var(--black);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-        
-        .step-content h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: var(--black);
-        }
-        
-        .step-content p {
-            color: var(--dark-gray);
-        }
-        
         /* Testimonials */
         .testimonials {
             padding: 100px 0;
-            background-color: var(--gray);
+            background-color: var(--white);
         }
         
         .testimonials-grid {
@@ -273,7 +260,7 @@
         }
         
         .testimonial-card {
-            background-color: var(--white);
+            background-color: var(--gray);
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -312,14 +299,14 @@
         /* Pricing */
         .pricing {
             padding: 100px 0;
-            background-color: var(--white);
+            background-color: var(--gray);
         }
         
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 30px;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
         }
         
@@ -336,7 +323,6 @@
         .pricing-card.popular {
             border: 2px solid var(--gold);
             position: relative;
-            transform: scale(1.05);
         }
         
         .popular-badge {
@@ -362,13 +348,19 @@
             font-size: 48px;
             font-weight: 700;
             color: var(--gold);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         
         .price span {
             font-size: 16px;
             font-weight: 400;
             color: var(--dark-gray);
+        }
+        
+        .price-yearly {
+            font-size: 18px;
+            color: var(--dark-gray);
+            margin-bottom: 20px;
         }
         
         .pricing-features {
@@ -386,64 +378,15 @@
             border-bottom: none;
         }
         
-        /* FAQ */
-        .faq {
-            padding: 100px 0;
-            background-color: var(--gray);
-        }
-        
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            background-color: var(--white);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-        
-        .faq-question {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 600;
+        .savings-badge {
+            display: inline-block;
+            background-color: var(--gold-light);
             color: var(--black);
-            background-color: var(--white);
-            transition: background-color 0.3s;
-        }
-        
-        .faq-question:hover {
-            background-color: #f9f9f9;
-        }
-        
-        .faq-question i {
-            transition: transform 0.3s;
-        }
-        
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s, padding 0.3s;
-            color: var(--dark-gray);
-        }
-        
-        .faq-item.active .faq-question {
-            background-color: #f9f9f9;
-        }
-        
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-        
-        .faq-item.active .faq-answer {
-            padding: 0 20px 20px;
-            max-height: 500px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
         
         /* CTA Section */
@@ -650,6 +593,10 @@
                 margin: 0 10px 10px;
             }
             
+            .hero {
+                padding-top: 160px;
+            }
+            
             .hero h1 {
                 font-size: 36px;
             }
@@ -663,8 +610,12 @@
                 align-items: center;
             }
             
-            .pricing-card.popular {
-                transform: none;
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .announcement-content {
+                animation: scrollText 15s linear infinite;
             }
         }
         
@@ -687,6 +638,17 @@
     </style>
 </head>
 <body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-text">🔥 Limited Time Offer: Get 1 Week Free Trial - Offer Ends at Midnight!</span>
+            <span class="announcement-text">🚀 AI-Generated Bible Insights - Learn the Truth in Seconds!</span>
+            <span class="announcement-text">❤️ We Donate 15% of Proceeds to Churches Worldwide</span>
+            <span class="announcement-text">📖 Unlimited Bible Answers for Just $19.99/month</span>
+            <span class="announcement-text">⏰ Special 20% Off Annual Plan - Join Today!</span>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container header-container">
@@ -696,10 +658,8 @@
             <nav>
                 <ul>
                     <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
                     <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#faq">FAQ</a></li>
                 </ul>
             </nav>
             <button class="cta-button" id="header-cta">Get Free Trial</button>
@@ -709,11 +669,11 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container hero-content">
-            <h1>Learn the <span>Truth</span> About the Bible</h1>
-            <p>Discover everything about the Bible in one place with our advanced AI assistant. Get accurate answers, deep insights, and spiritual guidance anytime.</p>
+            <h1>Discover Biblical Truth <span>in Seconds</span> with AI</h1>
+            <p>Get instant, accurate answers to all your Bible questions. Our AI-powered platform helps you understand scripture like never before.</p>
             <div class="hero-buttons">
                 <button class="cta-button" id="hero-cta">Start 1-Week Free Trial</button>
-                <button class="secondary-button">Learn More</button>
+                <button class="secondary-button">See How It Works</button>
             </div>
         </div>
     </section>
@@ -722,91 +682,51 @@
     <section class="features" id="features">
         <div class="container">
             <div class="section-title">
-                <h2>Your Complete Bible Companion</h2>
-                <p>BibleAI provides everything you need to understand scripture, with features designed to deepen your knowledge and faith.</p>
+                <h2>Powerful Bible Study Tools</h2>
+                <p>BibleAI combines artificial intelligence with biblical scholarship to give you the most comprehensive study experience.</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-robot"></i>
                     </div>
-                    <h3>AI-Powered Answers</h3>
-                    <p>Get instant, accurate responses to all your Bible questions from our trained AI model with extensive theological knowledge.</p>
+                    <h3>Instant Answers</h3>
+                    <p>Ask any Bible question in plain language and get accurate, well-researched responses instantly.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-book-open"></i>
                     </div>
                     <h3>Verse Explanations</h3>
-                    <p>Deep dive into any verse with historical context, interpretations, and practical applications for modern life.</p>
+                    <p>Deep dive into any scripture with historical context, interpretations, and practical applications.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-search"></i>
                     </div>
                     <h3>Advanced Search</h3>
-                    <p>Find exactly what you're looking for with our powerful search that understands concepts, themes, and questions.</p>
+                    <p>Find biblical passages by concept, theme, or question with our intelligent search technology.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-history"></i>
                     </div>
-                    <h3>Historical Context</h3>
-                    <p>Understand the Bible in its original context with cultural, geographical, and historical background information.</p>
+                    <h3>Historical Insights</h3>
+                    <p>Understand the cultural and historical background of biblical events and teachings.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-praying-hands"></i>
+                        <i class="fas fa-lightbulb"></i>
                     </div>
-                    <h3>Devotional Guides</h3>
-                    <p>Personalized daily devotionals and study plans tailored to your spiritual journey and interests.</p>
+                    <h3>Daily Insights</h3>
+                    <p>Receive personalized scripture recommendations and study prompts tailored for you.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-mobile-alt"></i>
                     </div>
-                    <h3>Community Insights</h3>
-                    <p>See how others interpret and apply scripture through shared notes and discussions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <div class="section-title">
-                <h2>How BibleAI Works</h2>
-                <p>Getting biblical wisdom has never been easier. Here's how you can start your journey today.</p>
-            </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Sign Up for Free</h3>
-                        <p>Create your account and start your 1-week free trial with no credit card required.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Ask Your Questions</h3>
-                        <p>Type any Bible-related question or topic you want to explore in natural language.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Get Instant Answers</h3>
-                        <p>Receive comprehensive, well-researched responses with scriptural references and explanations.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Deepen Your Understanding</h3>
-                        <p>Follow-up with more questions, save your insights, and grow in biblical knowledge.</p>
-                    </div>
+                    <h3>Anywhere Access</h3>
+                    <p>Study on the go with our mobile-friendly platform that works on all your devices.</p>
                 </div>
             </div>
         </div>
@@ -816,37 +736,37 @@
     <section class="testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
-                <h2>What People Are Saying</h2>
-                <p>Thousands have transformed their Bible study with BibleAI. Here's what some of them say.</p>
+                <h2>Trusted by Thousands</h2>
+                <p>See how BibleAI is transforming Bible study for believers around the world.</p>
             </div>
             <div class="testimonials-grid">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"BibleAI has revolutionized my Bible study. I can get answers to complex theological questions instantly, and the explanations are always grounded in scripture."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
-                        <div class="author-info">
-                            <h4>Sarah J.</h4>
-                            <p>Pastor's Wife</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"As a new Christian, I had so many questions but felt intimidated to ask. BibleAI gave me a safe space to learn at my own pace with accurate information."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T.">
-                        <div class="author-info">
-                            <h4>Michael T.</h4>
-                            <p>New Believer</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"The historical context feature has deepened my sermons tremendously. My congregation has noticed the difference in my teaching since I started using BibleAI."</p>
+                    <p class="testimonial-text">"I've been using BibleAI for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
                     <div class="testimonial-author">
                         <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Pastor David L.">
                         <div class="author-info">
                             <h4>Pastor David L.</h4>
                             <p>Church Leader</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. BibleAI answers my questions in language I can understand and has helped me grow so much."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
+                        <div class="author-info">
+                            <h4>Sarah J.</h4>
+                            <p>New Believer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The depth of knowledge in this platform is astounding. I've discovered connections between scriptures I never would have found on my own."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T.">
+                        <div class="author-info">
+                            <h4>Michael T.</h4>
+                            <p>Bible Study Leader</p>
                         </div>
                     </div>
                 </div>
@@ -858,104 +778,39 @@
     <section class="pricing" id="pricing">
         <div class="container">
             <div class="section-title">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Choose the plan that fits your spiritual journey. All plans include our 1-week free trial.</p>
+                <h2>Simple, Affordable Pricing</h2>
+                <p>Choose the plan that works for you. Start with a 1-week free trial, no credit card required.</p>
             </div>
             <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Basic</h3>
-                    <div class="price">$9.99<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li>100 AI questions/month</li>
-                        <li>Basic verse explanations</li>
-                        <li>Standard search</li>
-                        <li>Email support</li>
-                    </ul>
-                    <button class="cta-button">Start Free Trial</button>
-                </div>
                 <div class="pricing-card popular">
                     <div class="popular-badge">Most Popular</div>
-                    <h3>Pro</h3>
+                    <h3>Monthly Plan</h3>
                     <div class="price">$19.99<span>/month</span></div>
+                    <div class="price-yearly">Billed monthly</div>
                     <ul class="pricing-features">
                         <li>Unlimited AI questions</li>
                         <li>Detailed verse explanations</li>
                         <li>Advanced search</li>
                         <li>Historical context</li>
-                        <li>Devotional guides</li>
+                        <li>Daily insights</li>
                         <li>Priority support</li>
                     </ul>
                     <button class="cta-button">Start Free Trial</button>
                 </div>
                 <div class="pricing-card">
-                    <h3>Family</h3>
-                    <div class="price">$29.99<span>/month</span></div>
+                    <h3>Yearly Plan</h3>
+                    <div class="savings-badge">Save 20%</div>
+                    <div class="price">$15.99<span>/month</span></div>
+                    <div class="price-yearly">$191.88 billed annually</div>
                     <ul class="pricing-features">
-                        <li>Up to 5 family members</li>
-                        <li>Unlimited AI questions</li>
-                        <li>All Pro features</li>
-                        <li>Family study plans</li>
-                        <li>Shared notes</li>
-                        <li>24/7 support</li>
+                        <li>Everything in Monthly Plan</li>
+                        <li>Annual savings of $48</li>
+                        <li>Exclusive content</li>
+                        <li>Priority feature requests</li>
+                        <li>Extended support hours</li>
+                        <li>Special member badge</li>
                     </ul>
                     <button class="cta-button">Start Free Trial</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="faq" id="faq">
-        <div class="container">
-            <div class="section-title">
-                <h2>Frequently Asked Questions</h2>
-                <p>Find answers to common questions about BibleAI.</p>
-            </div>
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Is BibleAI's information theologically sound?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Yes, our AI has been trained on reputable biblical sources, commentaries, and theological works from across the Christian spectrum. We prioritize accuracy and scriptural integrity in all responses.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>How does the free trial work?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>You get full access to all features of your chosen plan for 7 days with no payment required. If you don't cancel before the trial ends, your subscription will automatically continue at the regular price.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Can I cancel anytime?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Absolutely. You can cancel your subscription at any time through your account settings, and you'll continue to have access until the end of your billing period.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>What translations does BibleAI use?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our system references multiple translations including ESV, NIV, KJV, and NASB. You can specify your preferred translation in your account settings.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Is there a mobile app?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our web app works perfectly on mobile browsers, and we're currently developing native iOS and Android apps to be released later this year.</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -964,7 +819,7 @@
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
-            <h2>Ready to Deepen Your Biblical Understanding?</h2>
+            <h2>Ready to Transform Your Bible Study?</h2>
             <p>Join thousands of believers who are growing in their faith through BibleAI. Start your free trial today with no commitment.</p>
             <button class="cta-button" id="bottom-cta">Get 1-Week Free Trial</button>
         </div>
@@ -976,47 +831,34 @@
             <div class="footer-container">
                 <div class="footer-column">
                     <h3>BibleAI</h3>
-                    <p>Your complete Bible study companion powered by artificial intelligence.</p>
+                    <p>Your AI-powered Bible study companion helping you discover biblical truth in seconds.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="footer-column">
-                    <h3>Features</h3>
+                    <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#">AI Bible Answers</a></li>
-                        <li><a href="#">Verse Explanations</a></li>
-                        <li><a href="#">Devotional Guides</a></li>
-                        <li><a href="#">Historical Context</a></li>
-                        <li><a href="#">Advanced Search</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Blog</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Company</h3>
                     <ul>
                         <li><a href="#">About Us</a></li>
-                        <li><a href="#">Our Mission</a></li>
-                        <li><a href="#">Theological Advisors</a></li>
-                        <li><a href="#">Careers</a></li>
                         <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Study Guides</a></li>
-                        <li><a href="#">Bible Reading Plans</a></li>
-                        <li><a href="#">Glossary</a></li>
-                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 BibleAI. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+                <p>&copy; 2025 BibleAI. All rights reserved. We donate 15% of proceeds to churches worldwide.</p>
             </div>
         </div>
     </footer>
@@ -1045,33 +887,56 @@
     </div>
 
     <script>
-        // Mobile menu toggle (if needed)
-        document.addEventListener('DOMContentLoaded', function() {
-            // FAQ Accordion
-            const faqItems = document.querySelectorAll('.faq-item');
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question');
-                question.addEventListener('click', () => {
-                    item.classList.toggle('active');
-                    
-                    // Close other open items
-                    faqItems.forEach(otherItem => {
-                        if (otherItem !== item && otherItem.classList.contains('active')) {
-                            otherItem.classList.remove('active');
-                        }
-                    });
-                });
+        // Announcement bar text cycling
+        const announcementTexts = [
+            "🔥 Limited Time Offer: Get 1 Week Free Trial - Offer Ends at Midnight!",
+            "🚀 AI-Generated Bible Insights - Learn the Truth in Seconds!",
+            "❤️ We Donate 15% of Proceeds to Churches Worldwide",
+            "📖 Unlimited Bible Answers for Just $19.99/month",
+            "⏰ Special 20% Off Annual Plan - Join Today!"
+        ];
+        
+        const announcementContent = document.querySelector('.announcement-content');
+        
+        // Duplicate texts for seamless looping
+        announcementContent.innerHTML = announcementTexts.map(text => 
+            `<span class="announcement-text">${text}</span>`
+        ).join('') + announcementTexts.map(text => 
+            `<span class="announcement-text">${text}</span>`
+        ).join('');
+        
+        // Modal functionality
+        const modal = document.getElementById('signup-modal');
+        const openModalButtons = document.querySelectorAll('.cta-button, #header-cta, #hero-cta, #bottom-cta');
+        const closeModal = document.querySelector('.close-modal');
+        
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             });
-            
-            // Modal functionality
-            const modal = document.getElementById('signup-modal');
-            const openModalButtons = document.querySelectorAll('.cta-button, #header-cta, #hero-cta, #bottom-cta');
-            const closeModal = document.querySelector('.close-modal');
-            
-            openModalButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    modal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                });
-            });
-            
+        });
+        
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Form submission
+        document.getElementById('signup-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Here you would typically send the form data to your server
+            alert('Thank you for signing up! Your free trial has started.');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    </script>
+</body>
+</html>
