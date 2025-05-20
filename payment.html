@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaithChat - Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F5D98F;
+            --gold-dark: #B8860B;
+            --black: #121212;
+            --white: #FFFFFF;
+            --gray: #F5F5F5;
+            --dark-gray: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Announcement Bar */
+        .announcement-bar {
+            background-color: var(--gold);
+            color: var(--white);
+            padding: 8px 0;
+            text-align: center;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 20px 0;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+        
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .login-button {
+            background-color: transparent;
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .login-button:hover {
+            background-color: var(--gold);
+            color: var(--black);
+        }
+        
+        .cta-button {
+            background-color: var(--gold);
+            color: var(--black);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--gold-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* Payment Section */
+        .payment-section {
+            padding: 60px 0;
+            background-color: var(--gray);
+        }
+        
+        .payment-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--black);
+            margin-bottom: 10px;
+        }
+        
+        .section-title p {
+            color: var(--dark-gray);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .payment-form {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .form-section h3 {
+            font-size: 20px;
+            color: var(--black);
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: var(--black);
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        
+        .form-group.error input,
+        .form-group.error select {
+            border-color: #e74c3c;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-option input {
+            margin-right: 10px;
+        }
+        
+        .payment-option.active {
+            border-color: var(--gold);
+            background-color: var(--gray);
+        }
+        
+        .card-details {
+            display: none;
+            margin-top: 15px;
+        }
+        
+        #card-element {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: var(--white);
+        }
+        
+        #paypal-button-container {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .submit-button {
+            background-color: var(--gold);
+            color: var(--black);
+            padding: 15px;
+            border-radius: 30px;
+            font-weight: 600;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .submit-button:hover {
+            background-color: var(--gold-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .secure-checkout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+        
+        .secure-checkout i {
+            color: var(--gold);
+        }
+        
+        .payment-badges {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-left: 10px;
+        }
+        
+        .payment-badge {
+            width: 40px;
+            height: 24px;
+            object-fit: contain;
+            filter: grayscale(30%);
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+        
+        .payment-badge:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 8px 8px;
+            }
+            
+            .header-buttons {
+                margin-top: 15px;
+            }
+            
+            .payment-container {
+                padding: 0 15px;
+            }
+            
+            .payment-form {
+                padding: 20px;
+            }
+            
+            .section-title h2 {
+                font-size: 28px;
+            }
+            
+            .section-title p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-bible"></i> FaithChat
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#testimonials">Testimonials</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                </ul>
+            </nav>
+            <div class="header-buttons">
+                <a href="login.html" class="login-button">Login</a>
+                <a href="index.html" class="cta-button">Back to Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Section -->
+    <section class="payment-section">
+        <div class="container payment-container">
+            <div class="section-title">
+                <h2>Complete Your Subscription</h2>
+                <p>Enter your details to start your 1-week free trial.</p>
+            </div>
+            <form id="payment-form" class="payment-form">
+                <!-- Contact Information -->
+                <div class="form-section">
+                    <h3>Contact Information</h3>
+                    <div class="form-group">
+                        <label for="email">Email <span style="color: #e74c3c;">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message">Please enter a valid email address.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="first-name">First Name <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="first-name" name="first-name" required>
+                        <div class="error-message">Please enter your first name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="last-name" name="last-name" required>
+                        <div class="error-message">Please enter your last name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="form-section">
+                    <h3>Address</h3>
+                    <div class="form-group">
+                        <label for="address">Address <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="address" name="address" required>
+                        <div class="error-message">Please enter your address.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="apartment">Apartment, Suite, etc. (Optional)</label>
+                        <input type="text" id="apartment" name="apartment">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="city" name="city" required>
+                        <div class="error-message">Please enter your city.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State <span style="color: #e74c3c;">*</span></label>
+                        <select id="state" name="state" required>
+                            <option value="">Select a state</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select>
+                        <div class="error-message">Please select your state.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="zip">ZIP Code <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="zip" name="zip" required>
+                        <div class="error-message">Please enter your ZIP code.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country <span style="color: #e74c3c;">*</span></label>
+                        <select id="country" name="country" required>
+                            <option value="">Select a country</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <!-- Add more countries as needed -->
+                        </select>
+                        <div class="error-message">Please select your country.</div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <label class="payment-option" for="payment-card">
+                            <input type="radio" id="payment-card" name="payment-method" value="card" checked>
+                            Credit/Debit Card
+                            <div class="payment-badges">
+                                <img src="visa.png" class="payment-badge" alt="Visa">
+                                <img src="mastercard.png" class="payment-badge" alt="Mastercard">
+                                <img src="amex.png" class="payment-badge" alt="American Express">
+                            </div>
+                        </label>
+                        <div class="card-details" id="card-details">
+                            <div class="form-group">
+                                <label for="card-element">Card Information</label>
+                                <div id="card-element"></div>
+                                <div id="card-errors" class="error-message"></div>
+                            </div>
+                        </div>
+                        <label class="payment-option" for="payment-paypal">
+                            <input type="radio" id="payment-paypal" name="payment-method" value="paypal">
+                            PayPal
+                            <img src="paypal.png" class="payment-badge" alt="PayPal">
+                        </label>
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </div>
+
+                <!-- Secure Checkout -->
+                <div class="secure-checkout">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure Checkout: All transactions are encrypted</span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-button" id="submit-button">Start Free Trial</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Stripe
+        const stripe = Stripe('YOUR_STRIPE_PUBLISHABLE_KEY');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#121212',
+                    '::placeholder': {
+                        color: '#aaa',
+                    },
+                },
+                invalid: {
+                    color: '#e74c3c',
+                },
+            },
+        });
+        cardElement.mount('#card-element');
+
+        // Form Validation
+        const form = document.getElementById('payment-form');
+        const submitButton = document.getElementById('submit-button');
+        const requiredFields = form.querySelectorAll('input[required], select[required]');
+        const cardDetails = document.getElementById('card-details');
+        const paypalContainer = document.getElementById('paypal-button-container');
+        const paymentOptions = document.querySelectorAll('input[name="payment-method"]');
+
+        // Toggle Payment Method
+        paymentOptions.forEach(option => {
+            option.addEventListener('change', () => {
+                cardDetails.style.display = option.value === 'card' ? 'block' : 'none';
+                paypalContainer.style.display = option.value === 'paypal' ? 'block' : 'none';
+                option.parentElement.classList.add('active');
+                document.querySelectorAll('.payment-option').forEach(opt => {
+                    if (opt !== option.parentElement) opt.classList.remove('active');
+                });
+            });
+        });
+        cardDetails.style.display = 'block'; // Default to card
+
+        // PayPal Button
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const plan = new URLSearchParams(window.location.search).get('plan') || 'monthly';
+                const amount = plan === 'monthly' ? '19.99' : '191.88';
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount,
+                            currency_code: 'USD'
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Payment completed successfully!');
+                    // Send form data and payment details to your server
+                });
+            }
+        }).render('#paypal-button-container');
+
+        // Form Submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitButton.disabled = true;
+
+            // Validate required fields
+            let hasError = false;
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.parentElement.classList.add('error');
+                    field.parentElement.querySelector('.error-message').style.display = 'block';
+                    hasError = true;
+                } else {
+                    field.parentElement.classList.remove('error');
+                    field.parentElement.querySelector('.error-message').style.display = 'none';
+                }
+            });
+
+            if (hasError) {
+                submitButton.disabled = false;
+                return;
+            }
+
+            // Handle payment
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            if (paymentMethod === 'card') {
+                const { error, paymentMethod } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                    billing_details: {
+                        email: document.getElementById('email').value,
+                        name: `${document.getElementById('first-name').value} ${document.getElementById('last-name').value}`,
+                        phone: document.getElementById('phone').value || null,
+                        address: {
+                            line1: document.getElementById('address').value,
+                            line2: document.getElementById('apartment').value || null,
+                            city: document.getElementById('city').value,
+                            state: document.getElementById('state').value,
+                            postal_code: document.getElementById('zip').value,
+                            country: document.getElementById('country').value,
+                        }
+                    }
+                });
+
+                if (error) {
+                    document.getElementById('card-errors').textContent = error.message;
+                    document.getElementById('card-errors').style.display = 'block';
+                    submitButton.disabled = false;
+                } else {
+                    // Send paymentMethod.id and form data to your server for processing
+                    alert('Card payment processed successfully!');
+                    // Redirect to confirmation page or handle server-side
+                }
+            } else {
+                // PayPal handles its own flow via the button
+            }
+        });
+
+        // Real-time validation
+        requiredFields.forEach(field => {
+            field.addEventListener('input', () => {
+                if (field.value.trim()) {
+                    field.parentElement.classList.remove('error');
+                    field.parentElement.querySelector('.error-message').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
