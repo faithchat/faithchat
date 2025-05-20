@@ -126,6 +126,7 @@
             transition: all 0.3s;
             border: none;
             cursor: pointer;
+            text-decoration: none;
         }
         
         .cta-button:hover {
@@ -403,13 +404,14 @@
         .payment-badges {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
         }
         
         .payment-badge {
             width: 40px;
-            height: 25px;
+            height: 24px;
             object-fit: contain;
             filter: grayscale(30%);
             opacity: 0.8;
@@ -511,104 +513,6 @@
             font-size: 12px;
         }
         
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: var(--white);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            padding: 25px;
-            position: relative;
-            animation: modalFadeIn 0.3s;
-        }
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--dark-gray);
-            transition: color 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: var(--black);
-        }
-        
-        .modal h2 {
-            margin-bottom: 15px;
-            color: var(--black);
-            text-align: center;
-            font-size: 24px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: var(--dark-gray);
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus {
-            border-color: var(--gold);
-            outline: none;
-        }
-        
-        .submit-button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--gold);
-            color: var(--black);
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .submit-button:hover {
-            background-color: var(--gold-dark);
-        }
-        
         /* Responsive Styles */
         @media (max-width: 768px) {
             .header-container {
@@ -645,6 +549,10 @@
             .hero-buttons {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .secondary-button {
+                display: none;
             }
             
             .features-grid {
@@ -709,7 +617,7 @@
             </nav>
             <div class="header-buttons">
                 <a href="login.html" class="login-button">Login</a>
-                <button class="cta-button" id="header-cta">Get Started</button>
+                <a href="payment.html?plan=monthly" class="cta-button" id="header-cta">Get Started</a>
             </div>
         </div>
     </header>
@@ -720,7 +628,7 @@
             <h1>Discover Biblical Truth <span>in Seconds</span> with AI</h1>
             <p>Get instant, accurate answers to all your Bible questions. Our AI-powered platform helps you understand scripture like never before.</p>
             <div class="hero-buttons">
-                <button class="cta-button" id="hero-cta">Start 1-Week Free Trial</button>
+                <a href="payment.html?plan=monthly" class="cta-button" id="hero-cta">Start 1-Week Free Trial</a>
                 <button class="secondary-button">See How It Works</button>
             </div>
         </div>
@@ -845,10 +753,11 @@
                     </ul>
                     <a href="payment.html?plan=monthly" class="cta-button">Start Free Trial</a>
                     <div class="payment-badges">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visa/visa-original.svg" class="payment-badge" alt="Visa">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mastercard/mastercard-original.svg" class="payment-badge" alt="Mastercard">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" class="payment-badge" alt="Apple Pay">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/paypal/paypal-original.svg" class="payment-badge" alt="PayPal">
+                        <img src="visa.png" class="payment-badge" alt="Visa">
+                        <img src="mastercard.png" class="payment-badge" alt="Mastercard">
+                        <img src="amex.png" class="payment-badge" alt="American Express">
+                        <img src="apple.png" class="payment-badge" alt="Apple Pay">
+                        <img src="paypal.png" class="payment-badge" alt="PayPal">
                     </div>
                 </div>
                 <div class="pricing-card">
@@ -866,10 +775,11 @@
                     </ul>
                     <a href="payment.html?plan=yearly" class="cta-button">Start Free Trial</a>
                     <div class="payment-badges">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visa/visa-original.svg" class="payment-badge" alt="Visa">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mastercard/mastercard-original.svg" class="payment-badge" alt="Mastercard">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" class="payment-badge" alt="Apple Pay">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/paypal/paypal-original.svg" class="payment-badge" alt="PayPal">
+                        <img src="visa.png" class="payment-badge" alt="Visa">
+                        <img src="mastercard.png" class="payment-badge" alt="Mastercard">
+                        <img src="amex.png" class="payment-badge" alt="American Express">
+                        <img src="apple.png" class="payment-badge" alt="Apple Pay">
+                        <img src="paypal.png" class="payment-badge" alt="PayPal">
                     </div>
                 </div>
             </div>
@@ -881,7 +791,7 @@
         <div class="container">
             <h2>Ready to Transform Your Bible Study?</h2>
             <p>Join thousands of believers who are growing in their faith through BibleAI. Start your free trial today with no commitment.</p>
-            <button class="cta-button" id="bottom-cta">Get 1-Week Free Trial</button>
+            <a href="payment.html?plan=monthly" class="cta-button" id="bottom-cta">Start 1-Week Free Trial</a>
         </div>
     </section>
 
@@ -921,67 +831,5 @@
             </div>
         </div>
     </footer>
-
-    <!-- Signup Modal -->
-    <div class="modal" id="signup-modal">
-        <div class="modal-content">
-            <span class="close-modal">×</span>
-            <h2>Start Your Free Trial</h2>
-            <form id="signup-form">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password"(obligatory) name="password" required>
-                </div>
-                <button type="submit" class="submit-button">Get 1-Week Free Trial</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // Modal functionality
-        const modal = document.getElementById('signup-modal');
-        const openModalButtons = document.querySelectorAll('.cta-button, #header-cta, #hero-cta, #bottom-cta');
-        const closeModal = document.querySelector('.close-modal');
-        
-        openModalButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                // Check if the button is not a link
-                if (button.tagName !== 'A') {
-                    e.preventDefault();
-                    modal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                }
-            });
-        });
-        
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-        
-        // Form submission
-        document.getElementById('signup-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Here you would typically send the form data to your server
-            alert('Thank you for signing up! Your free trial has started.');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-    </script>
 </body>
 </html>
