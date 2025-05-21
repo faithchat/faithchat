@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bible AI - Learn the Truth About the Bible in Seconds</title>
+    <title>FaithChat - Learn the Truth About the Bible in Seconds</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -597,6 +597,9 @@
     </style>
 </head>
 <body>
+    <!-- Tracking Pixel -->
+    <img src="/track-pixel" style="display: none;" onload="trackVisitor()">
+
     <!-- Announcement Bar -->
     <div class="announcement-bar">
         <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
@@ -606,7 +609,7 @@
     <header>
         <div class="container header-container">
             <a href="#" class="logo">
-                <i class="fas fa-bible"></i> BibleAI
+                <i class="fas fa-bible"></i> FaithChat
             </a>
             <nav>
                 <ul>
@@ -639,7 +642,7 @@
         <div class="container">
             <div class="section-title">
                 <h2>Powerful Bible Study Tools</h2>
-                <p>BibleAI combines artificial intelligence with biblical scholarship to give you the most comprehensive study experience.</p>
+                <p>FaithChat combines artificial intelligence with biblical scholarship to give you the most comprehensive study experience.</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -693,11 +696,11 @@
         <div class="container">
             <div class="section-title">
                 <h2>Trusted by Thousands</h2>
-                <p>See how BibleAI is transforming Bible study for believers around the world.</p>
+                <p>See how FaithChat is transforming Bible study for believers around the world.</p>
             </div>
             <div class="testimonials-grid">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"I've been using BibleAI for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
+                    <p class="testimonial-text">"I've been using FaithChat for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
                     <div class="testimonial-author">
                         <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Pastor David L.">
                         <div class="author-info">
@@ -707,7 +710,7 @@
                     </div>
                 </div>
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. BibleAI answers my questions in language I can understand and has helped me grow so much."</p>
+                    <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. FaithChat answers my questions in language I can understand and has helped me grow so much."</p>
                     <div class="testimonial-author">
                         <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
                         <div class="author-info">
@@ -790,7 +793,7 @@
     <section class="cta-section">
         <div class="container">
             <h2>Ready to Transform Your Bible Study?</h2>
-            <p>Join thousands of believers who are growing in their faith through BibleAI. Start your free trial today with no commitment.</p>
+            <p>Join thousands of believers who are growing in their faith through FaithChat. Start your free trial today with no commitment.</p>
             <a href="payment.html?plan=monthly" class="cta-button" id="bottom-cta">Start 1-Week Free Trial</a>
         </div>
     </section>
@@ -800,7 +803,7 @@
         <div class="container">
             <div class="footer-container">
                 <div class="footer-column">
-                    <h3>BibleAI</h3>
+                    <h3>FaithChat</h3>
                     <p>Your AI-powered Bible study companion helping you discover biblical truth in seconds.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -827,9 +830,33 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>© 2025 BibleAI. All rights reserved. We donate 15% of proceeds to churches worldwide.</p>
+                <p>© 2025 FaithChat. All rights reserved. We donate 15% of proceeds to churches worldwide.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Tracking Script -->
+    <script>
+        async function trackVisitor() {
+            try {
+                const response = await fetch('http://ip-api.com/json');
+                const data = await response.json();
+                await fetch('/api/track-visitor', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ip: data.query,
+                        location: {
+                            country: data.country,
+                            state: data.regionName
+                        },
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.error('Error tracking visitor:', error);
+            }
+        }
+    </script>
 </body>
 </html>
