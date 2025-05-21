@@ -14,8 +14,7 @@ mongoose.connect('mongodb://localhost/faithchat', { useNewUrlParser: true, useUn
 // Schemas
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
-    password: { type: String }, // For admins
-    accessKey: { type: String }, // For regular users
+    password: { type: String }, // For admins and regular users
     subscriptionEnd: { type: Date },
     isTrial: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
@@ -76,10 +75,11 @@ const verifyUserToken = (req, res, next) => {
 // Seed Admin Users (Run Once)
 const seedAdmins = async () => {
     const admins = [
-        { email: 'admin1@faithchat.org', password: 'K7#mP9$xL2vNqW8!r', isAdmin: true },
-        { email: 'admin2@faithchat.org', password: 'Z3@qT5^hJ9mYpL2&k', isAdmin: true },
-        // ... Add all 25 admin accounts here
-        { email: 'admin25@faithchat.org', password: 'T3#rL2^pQ5mJkW9@x', isAdmin: true }
+        { email: 'admin1@faithchat.org', password: 'X9#mQ2$vL4pNrW7!k', isAdmin: true },
+        { email: 'admin2@faithchat.org', password: 'P3@qT8^hJ5mYpL1&k', isAdmin: true },
+        { email: 'admin3@faithchat.org', password: 'R7!wF2$vQ9nXsP4#j', isAdmin: true },
+        { email: 'admin4@faithchat.org', password: 'M1#kL9^pT6vYqR3@h', isAdmin: true },
+        { email: 'admin5@faithchat.org', password: 'W5@kM3^hP8vTqR2!j', isAdmin: true }
     ];
 
     for (const admin of admins) {
@@ -105,26 +105,13 @@ app.post('/api/admin-login', async (req, res) => {
     res.json({ token });
 });
 
-// User Login (Updated to Support Admin Credentials)
+// User Login (Updated to Use Password)
 app.post('/api/login', async (req, res) => {
-    const { email, accessKey } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user) {
-        return res.status(401).send('Invalid email or access key');
-    }
-
-    // Check if user is admin (using password) or regular user (using access key)
-    let isValid = false;
-    if (user.isAdmin) {
-        // For admin users logging in via login.html, use the accessKey field as their password
-        isValid = await bcrypt.compare(accessKey, user.password);
-    } else {
-        isValid = user.accessKey === accessKey;
-    }
-
-    if (!isValid) {
-        return res.status(401).send('Invalid email or access key');
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).send('Invalid email or password');
     }
 
     const token = jwt.sign({ email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '1h' });
@@ -151,25 +138,17 @@ app.get('/track-pixel', (req, res) => {
 // Admin Dashboard Data
 app.get('/api/admin/dashboard', verifyAdminToken, async (req, res) => {
     try {
-        // Total Visitors
         const totalVisitors = await Visitor.countDocuments();
-
-        // Visitor Locations (Recent 10)
         const recentVisitors = await Visitor.find().sort({ timestamp: -1 }).limit(10);
-
-        // Daily Subscriptions
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const dailySubscriptions = await Subscription.countDocuments({
             timestamp: { $gte: today }
         });
-
-        // Total Revenue
         const totalRevenue = (await Subscription.aggregate([
             { $group: { _id: null, total: { $sum: '$amount' } } }
         ]))[0]?.total || 0;
 
-        // Subscriptions Over Time (Last 7 Days)
         const sevenDaysAgo = new Date(today);
         sevenDaysAgo.setDate(today.getDate() - 6);
         const subscriptionData = await Subscription.aggregate([
@@ -209,7 +188,7 @@ app.post('/api/admin-logout', verifyAdminToken, (req, res) => {
     res.status(200).send();
 });
 
-// User Routes (From Previous Responses)
+// User Routes
 app.get('/api/user', verifyUserToken, async (req, res) => {
     const user = await User.findOne({ email: req.user.email });
     res.json({
