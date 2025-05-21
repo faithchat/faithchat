@@ -29,7 +29,6 @@
             line-height: 1.6;
         }
 
-        /* Announcement Bar */
         .announcement-bar {
             background-color: var(--gold);
             color: var(--white);
@@ -40,7 +39,6 @@
             z-index: 1000;
         }
 
-        /* Header */
         header {
             background-color: var(--black);
             color: var(--white);
@@ -92,7 +90,6 @@
             transform: translateX(-3px);
         }
 
-        /* Login Section */
         .login-section {
             min-height: 100vh;
             display: flex;
@@ -254,7 +251,6 @@
             width: 100%;
         }
 
-        /* Error Messages */
         .error-message {
             color: #dc3545;
             font-size: 14px;
@@ -262,7 +258,6 @@
             display: none;
         }
 
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .login-container {
                 margin: 0 20px;
@@ -276,12 +271,10 @@
     </style>
 </head>
 <body>
-    <!-- Announcement Bar -->
     <div class="announcement-bar">
         <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
     </div>
 
-    <!-- Header -->
     <header>
         <div class="header-container">
             <a href="index.html" class="logo">
@@ -296,7 +289,6 @@
         </div>
     </header>
 
-    <!-- Login Section -->
     <section class="login-section">
         <div class="login-container">
             <div class="login-header">
@@ -312,9 +304,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="accessKey">Access Key</label>
-                    <input type="text" id="accessKey" name="accessKey" required>
-                    <div class="error-message" id="accessKeyError">Please enter a valid access key</div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="error-message" id="passwordError">Please enter a valid password</div>
                 </div>
 
                 <button type="submit" class="submit-button" id="submitBtn">
@@ -329,16 +321,14 @@
     </section>
 
     <script>
-        // Form validation and submission handling
         const form = document.getElementById('loginForm');
         const emailField = document.getElementById('email');
-        const accessKeyField = document.getElementById('accessKey');
+        const passwordField = document.getElementById('password');
         const submitBtn = document.getElementById('submitBtn');
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Show loading state
             submitBtn.classList.add('loading');
             submitBtn.setAttribute('disabled', 'true');
             submitBtn.querySelector('.button-text').style.visibility = 'hidden';
@@ -349,7 +339,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         email: emailField.value,
-                        accessKey: accessKeyField.value
+                        password: passwordField.value
                     })
                 });
 
@@ -358,10 +348,10 @@
                     localStorage.setItem('token', data.token);
                     window.location.href = 'chat.html';
                 } else {
-                    document.getElementById('emailError').textContent = 'Invalid email or access key';
+                    document.getElementById('emailError').textContent = 'Invalid email or password';
                     document.getElementById('emailError').style.display = 'block';
-                    document.getElementById('accessKeyError').textContent = 'Invalid email or access key';
-                    document.getElementById('accessKeyError').style.display = 'block';
+                    document.getElementById('passwordError').textContent = 'Invalid email or password';
+                    document.getElementById('passwordError').style.display = 'block';
                 }
             } catch (error) {
                 console.error('Login error:', error);
@@ -374,18 +364,17 @@
             }
         });
 
-        // Real-time validation
         emailField.addEventListener('input', validateForm);
-        accessKeyField.addEventListener('input', validateForm);
+        passwordField.addEventListener('input', validateForm);
 
         function validateForm() {
             const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value);
-            const accessKeyValid = accessKeyField.value.length > 0;
+            const passwordValid = passwordField.value.length > 0;
 
             document.getElementById('emailError').style.display = emailValid ? 'none' : 'block';
-            document.getElementById('accessKeyError').style.display = accessKeyValid ? 'none' : 'block';
+            document.getElementById('passwordError').style.display = passwordValid ? 'none' : 'block';
 
-            submitBtn.disabled = !(emailValid && accessKeyValid);
+            submitBtn.disabled = !(emailValid && passwordValid);
         }
     </script>
 </body>
