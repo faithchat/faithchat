@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bible AI - Admin Login</title>
+    <title>FaithChat - Admin Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -29,7 +29,6 @@
             line-height: 1.6;
         }
 
-        /* Announcement Bar */
         .announcement-bar {
             background-color: var(--gold);
             color: var(--white);
@@ -40,7 +39,6 @@
             z-index: 1000;
         }
 
-        /* Header */
         header {
             background-color: var(--black);
             color: var(--white);
@@ -92,7 +90,6 @@
             transform: translateX(-3px);
         }
 
-        /* Login Section */
         .login-section {
             min-height: 100vh;
             display: flex;
@@ -160,7 +157,7 @@
 
         .form-group input {
             width: 100%;
-            padding: 14px 45px 14px 15px;
+            padding: 14px 15px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
@@ -171,31 +168,6 @@
             border-color: var(--gold);
             outline: none;
             box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
-        }
-
-        .form-group input:valid:not(:placeholder-shown) {
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23212121' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") no-repeat 98% 50%;
-            background-size: 20px;
-        }
-
-        .form-group input:invalid:not(:placeholder-shown) {
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E") no-repeat 98% 50%;
-            background-size: 20px;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--dark-gray);
-            transition: all 0.3s;
-        }
-
-        .password-toggle:hover {
-            color: var(--gold);
-            transform: translateY(-50%) scale(1.1);
         }
 
         .submit-button {
@@ -241,132 +213,6 @@
             to { transform: rotate(1turn); }
         }
 
-        .login-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-        }
-
-        .remember-me input {
-            accent-color: var(--gold);
-            cursor: pointer;
-        }
-
-        .remember-me label {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .forgot-password {
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .forgot-password:hover {
-            text-decoration: underline;
-            transform: translateX(3px);
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 30px;
-            color: var(--dark-gray);
-        }
-
-        .signup-link a {
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-        }
-
-        .signup-link a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gold);
-            transition: width 0.3s;
-        }
-
-        .signup-link a:hover::after {
-            width: 100%;
-        }
-
-        .social-login {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .social-divider {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 25px 0;
-            color: var(--dark-gray);
-        }
-
-        .social-divider::before,
-        .social-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #ddd;
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .social-button {
-            padding: 12px 25px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid #ddd;
-            background: var(--white);
-            color: var(--dark-gray);
-        }
-
-        .social-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .social-button.google:hover {
-            border-color: #DB4437;
-            color: #DB4437;
-        }
-
-        .social-button.apple:hover {
-            border-color: #000;
-            color: #000;
-        }
-
-        .social-button.facebook:hover {
-            border-color: #1877F2;
-            color: #1877F2;
-        }
-
-        /* Error Messages */
         .error-message {
             color: #dc3545;
             font-size: 14px;
@@ -374,7 +220,6 @@
             display: none;
         }
 
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .login-container {
                 margin: 0 20px;
@@ -384,30 +229,18 @@
             .login-header h1 {
                 font-size: 28px;
             }
-
-            .social-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .social-button {
-                width: 100%;
-                justify-content: center;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Announcement Bar -->
     <div class="announcement-bar">
         <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
     </div>
 
-    <!-- Header -->
     <header>
         <div class="header-container">
             <a href="index.html" class="logo">
-                <i class="fas fa-bible"></i> BibleAI
+                <i class="fas fa-bible"></i> FaithChat
             </a>
             <nav>
                 <a href="index.html" class="back-home">
@@ -418,15 +251,14 @@
         </div>
     </header>
 
-    <!-- Admin Login Section -->
     <section class="login-section">
         <div class="login-container">
             <div class="login-header">
                 <h1>Admin Login</h1>
-                <p>Access the administrative dashboard</p>
+                <p>Access the admin dashboard</p>
             </div>
             
-            <form id="loginForm">
+            <form id="adminLoginForm">
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" name="email" required autofocus>
@@ -436,64 +268,18 @@
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
-                    <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
-                    <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
-                </div>
-
-                <div class="login-options">
-                    <label class="remember-me">
-                        <input type="checkbox"> Remember me
-                    </label>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <div class="error-message" id="passwordError">Please enter a valid password</div>
                 </div>
 
                 <button type="submit" class="submit-button" id="submitBtn">
                     <span class="button-text">Sign In</span>
                 </button>
             </form>
-
-            <div class="social-login">
-                <div class="social-divider">
-                    <span>Or continue with</span>
-                </div>
-                <div class="social-buttons">
-                    <div class="social-button google">
-                        <i class="fab fa-google"></i>
-                        Google
-                    </div>
-                    <div class="social-button apple">
-                        <i class="fab fa-apple"></i>
-                        Apple
-                    </div>
-                    <div class="social-button facebook">
-                        <i class="fab fa-facebook-f"></i>
-                        Facebook
-                    </div>
-                </div>
-            </div>
-
-            <div class="signup-link">
-                Don't have an account? <a href="signup.html">Create account</a>
-            </div>
         </div>
     </section>
 
     <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.querySelector('.password-toggle');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-
-        // Form validation and submission handling
-        const form = document.getElementById('loginForm');
+        const form = document.getElementById('adminLoginForm');
         const emailField = document.getElementById('email');
         const passwordField = document.getElementById('password');
         const submitBtn = document.getElementById('submitBtn');
@@ -501,30 +287,47 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Show loading state
             submitBtn.classList.add('loading');
             submitBtn.setAttribute('disabled', 'true');
             submitBtn.querySelector('.button-text').style.visibility = 'hidden';
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            try {
+                const response = await fetch('/api/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: emailField.value,
+                        password: passwordField.value
+                    })
+                });
 
-            // Handle successful login
-            window.location.href = 'dashboard.html';
-
-            // Handle errors would go here
-            // submitBtn.classList.remove('loading');
-            // submitBtn.removeAttribute('disabled');
-            // submitBtn.querySelector('.button-text').style.visibility = 'visible';
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('adminToken', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    document.getElementById('emailError').textContent = 'Invalid email or password';
+                    document.getElementById('emailError').style.display = 'block';
+                    document.getElementById('passwordError').textContent = 'Invalid email or password';
+                    document.getElementById('passwordError').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('emailError').textContent = 'An error occurred. Please try again.';
+                document.getElementById('emailError').style.display = 'block';
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.removeAttribute('disabled');
+                submitBtn.querySelector('.button-text').style.visibility = 'visible';
+            }
         });
 
-        // Real-time validation
         emailField.addEventListener('input', validateForm);
         passwordField.addEventListener('input', validateForm);
 
         function validateForm() {
             const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value);
-            const passwordValid = passwordField.value.length >= 8;
+            const passwordValid = passwordField.value.length > 0;
 
             document.getElementById('emailError').style.display = emailValid ? 'none' : 'block';
             document.getElementById('passwordError').style.display = passwordValid ? 'none' : 'block';
