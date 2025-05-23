@@ -53,15 +53,16 @@
             align-items: center;
         }
 
-        .hamburger {
+        .hamburger, .new-chat {
             font-size: 24px;
             color: var(--white);
             cursor: pointer;
             display: flex;
             align-items: center;
+            transition: color 0.3s;
         }
 
-        .hamburger:hover {
+        .hamburger:hover, .new-chat:hover {
             color: var(--gold);
         }
 
@@ -72,34 +73,12 @@
             text-decoration: none;
             display: flex;
             align-items: center;
+            justify-content: center;
+            flex: 1;
         }
 
         .logo i {
             margin-right: 10px;
-        }
-
-        .header-buttons {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logout-button {
-            background-color: var(--gold);
-            color: var(--black);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .logout-button:hover {
-            background-color: var(--gold-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
         .sidebar {
@@ -131,6 +110,67 @@
         .sidebar-header p {
             font-size: 14px;
             color: var(--gray);
+        }
+
+        .subscription-info {
+            background-color: var(--dark-gray);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .subscription-info.warning {
+            background-color: #e74c3c;
+        }
+
+        .settings {
+            margin-top: 20px;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--dark-gray);
+        }
+
+        .settings-header h3 {
+            font-size: 16px;
+        }
+
+        .settings-header i {
+            color: var(--gold);
+            transition: transform 0.3s;
+        }
+
+        .settings-header i.open {
+            transform: rotate(90deg);
+        }
+
+        .settings-list {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .settings-list.open {
+            display: block;
+        }
+
+        .settings-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: var(--dark-gray);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .settings-item:hover {
+            background-color: var(--gold);
+            color: var(--black);
         }
 
         .conversations {
@@ -248,26 +288,86 @@
         .chat-input button {
             background-color: var(--gold);
             color: var(--black);
-            padding: 12px 20px;
+            padding: 12px;
             border-radius: 30px;
-            font-weight: 600;
             border: none;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .chat-input button:hover {
             background-color: var(--gold-dark);
         }
 
+        .chat-input button i {
+            font-size: 16px;
+        }
+
+        .change-password-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .change-password-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .change-password-card h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .change-password-card form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .change-password-card input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .change-password-card button {
+            background-color: var(--gold);
+            color: var(--black);
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .change-password-card button:hover {
+            background-color: var(--gold-dark);
+        }
+
         @media (max-width: 768px) {
             .header-container {
-                flex-direction: column;
-                text-align: center;
+                flex-direction: row;
+                justify-content: space-between;
             }
 
-            .header-buttons {
-                margin-top: 15px;
+            .logo {
+                font-size: 24px;
             }
 
             .sidebar {
@@ -280,11 +380,11 @@
             }
 
             .chat-input form {
-                flex-direction: column;
+                flex-direction: row;
             }
 
             .chat-input button {
-                width: 100%;
+                padding: 12px;
             }
         }
     </style>
@@ -298,8 +398,8 @@
             <a href="index.html" class="logo">
                 <i class="fas fa-bible"></i> FaithChat
             </a>
-            <div class="header-buttons">
-                <button class="logout-button" onclick="logout()">Logout</button>
+            <div class="new-chat" onclick="startNewChat()">
+                <i class="fas fa-plus"></i>
             </div>
         </div>
     </header>
@@ -308,6 +408,19 @@
         <div class="sidebar-header">
             <h3 id="user-email">User Email</h3>
             <p>Premium Account</p>
+        </div>
+        <div class="subscription-info" id="subscription-info">
+            Trial ends in 5 days.
+        </div>
+        <div class="settings">
+            <div class="settings-header" onclick="toggleSettings()">
+                <h3>Settings</h3>
+                <i class="fas fa-chevron-right" id="settings-arrow"></i>
+            </div>
+            <div class="settings-list" id="settings-list">
+                <div class="settings-item" onclick="showChangePassword()">Change Password</div>
+                <div class="settings-item" onclick="logout()">Logout</div>
+            </div>
         </div>
         <div class="conversations">
             <div class="conversations-header" onclick="toggleConversations()">
@@ -327,10 +440,22 @@
         <div class="chat-input">
             <form id="chat-form">
                 <input type="text" id="chat-input" placeholder="Ask me a question" required>
-                <button type="submit">Send</button>
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
             </form>
         </div>
     </section>
+
+    <div class="change-password-overlay" id="change-password-overlay">
+        <div class="change-password-card">
+            <h2>Change Password</h2>
+            <form id="change-password-form">
+                <input type="password" id="current-password" placeholder="Current Password" required>
+                <input type="password" id="new-password" placeholder="New Password" required>
+                <input type="password" id="confirm-password" placeholder="Confirm New Password" required>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Hugging Face API Key and Model
@@ -339,7 +464,7 @@
 
         // System Prompt for FaithChat
         const systemPrompt = `
-You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith, as of 06:38 AM CEST on Friday, May 23, 2025. Your tone is warm, respectful, and encouraging, always affirming the user's spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 ("If any man shall add unto these things, God shall add unto him the plagues that are written in this book"). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
+You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith, as of 07:25 AM CEST on Friday, May 23, 2025. Your tone is warm, respectful, and encouraging, always affirming the user's spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 ("If any man shall add unto these things, God shall add unto him the plagues that are written in this book"). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
 
 You believe and teach the following core doctrines:
 
@@ -406,7 +531,9 @@ Guidelines:
 5. For users struggling with sin (e.g., pornography, homosexuality, substance abuse, gambling), lovingly point them to repentance and Jesus’ forgiveness (1 John 1:9: "If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.").
 6. For users facing depression, loneliness, or divorce, offer comforting scriptures and practical advice (e.g., Psalm 34:18: "The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.").
 7. When addressing other religions, contrast their teachings with the truth of Jesus Christ, showing how their texts promote sin and cannot save (John 14:6).
-8. Use a conversational tone, as if speaking to a friend, and end with an encouraging note (e.g., "Trust in Jesus, and He will guide your path!").
+8. Respond directly to the user's input without repeating their words (e.g., if the user says "Hi," respond with "Greetings! How may I assist you today?" instead of "Hi! I'm here to help...").
+9. Ensure responses are complete, finishing all sentences and thoughts (e.g., say "covenant" instead of cutting off at "coven").
+10. Use a conversational tone, as if speaking to a friend, and end with an encouraging note (e.g., "Trust in Jesus, and He will guide your path!").
 `;
 
         // Chat functionality
@@ -455,6 +582,13 @@ Guidelines:
                 chatContainer.appendChild(div);
             });
             chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Start a new chat
+        function startNewChat() {
+            currentConversationId = null;
+            chatContainer.innerHTML = '';
+            chatInput.value = '';
         }
 
         // Handle form submission
@@ -531,7 +665,7 @@ Guidelines:
                 console.error('Error calling Hugging Face API:', error);
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'chat-message ai';
-                errorDiv.textContent = 'Sorry, I encountered an error. Please try again.';
+                errorDiv.textContent = 'I encountered an error. Please try again.';
                 chatContainer.appendChild(errorDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
@@ -552,18 +686,50 @@ Guidelines:
             arrow.classList.toggle('open');
         }
 
+        function toggleSettings() {
+            const list = document.getElementById('settings-list');
+            const arrow = document.getElementById('settings-arrow');
+            list.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        function showChangePassword() {
+            document.getElementById('change-password-overlay').style.display = 'flex';
+        }
+
+        // Change password functionality (simulated)
+        document.getElementById('change-password-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match.');
+                return;
+            }
+
+            alert('Password changed successfully!'); // Simulated success
+            document.getElementById('change-password-overlay').style.display = 'none';
+            document.getElementById('change-password-form').reset();
+        });
+
         // Logout functionality
         function logout() {
-            // Clear local storage (optional, depending on your needs)
             localStorage.removeItem('conversations');
             window.location.href = 'login.html';
         }
 
         // Load user info and chat history on page load
         window.addEventListener('load', () => {
-            // Simulate user email (since no Supabase)
             document.getElementById('user-email').textContent = 'User Email';
             loadChatHistory();
+
+            // Simulate subscription/trial timer
+            const subscriptionInfo = document.getElementById('subscription-info');
+            const daysLeft = 5; // Simulated value
+            subscriptionInfo.textContent = `Trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`;
+            if (daysLeft <= 2) subscriptionInfo.classList.add('warning');
         });
     </script>
 </body>
