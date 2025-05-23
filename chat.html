@@ -86,6 +86,20 @@
             color: var(--gold);
         }
 
+        .logout-btn {
+            background-color: var(--gold);
+            color: var(--black);
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: var(--gold-dark);
+        }
+
         .chat-section {
             margin-top: 80px;
             height: calc(100vh - 80px);
@@ -205,6 +219,7 @@
                     <li><a href="index.html#features">Features</a></li>
                     <li><a href="index.html#testimonials">Testimonials</a></li>
                     <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="#" class="logout-btn" id="logout-btn">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -226,6 +241,19 @@
     </section>
 
     <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'login.html';
+        });
+
         // Hugging Face API Key and Model (Mistral 7B)
         const hfApiKey = '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';
         const hfApiUrl = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3';
