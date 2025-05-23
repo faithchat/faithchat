@@ -53,6 +53,18 @@
             align-items: center;
         }
 
+        .hamburger {
+            font-size: 24px;
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .hamburger:hover {
+            color: var(--gold);
+        }
+
         .logo {
             font-size: 28px;
             font-weight: 700;
@@ -66,38 +78,108 @@
             margin-right: 10px;
         }
 
-        nav ul {
+        .header-buttons {
             display: flex;
-            list-style: none;
+            align-items: center;
+            gap: 15px;
         }
 
-        nav ul li {
-            margin-left: 30px;
-        }
-
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: var(--gold);
-        }
-
-        .logout-btn {
+        .logout-button {
             background-color: var(--gold);
             color: var(--black);
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 500;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
             transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
         }
 
-        .logout-btn:hover {
+        .logout-button:hover {
             background-color: var(--gold-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: var(--black);
+            color: var(--white);
+            padding: 80px 20px 20px;
+            transition: left 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .conversations {
+            margin-top: 20px;
+        }
+
+        .conversations-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--dark-gray);
+        }
+
+        .conversations-header h3 {
+            font-size: 16px;
+        }
+
+        .conversations-header i {
+            color: var(--gold);
+            transition: transform 0.3s;
+        }
+
+        .conversations-header i.open {
+            transform: rotate(90deg);
+        }
+
+        .conversation-list {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .conversation-list.open {
+            display: block;
+        }
+
+        .conversation-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: var(--dark-gray);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .conversation-item:hover {
+            background-color: var(--gold);
+            color: var(--black);
         }
 
         .chat-section {
@@ -184,14 +266,13 @@
                 text-align: center;
             }
 
-            nav ul {
+            .header-buttons {
                 margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
             }
 
-            nav ul li {
-                margin: 0 8px 8px;
+            .sidebar {
+                width: 250px;
+                left: -250px;
             }
 
             .chat-message {
@@ -211,54 +292,52 @@
 <body>
     <header>
         <div class="container header-container">
+            <div class="hamburger" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
             <a href="index.html" class="logo">
                 <i class="fas fa-bible"></i> FaithChat
             </a>
-            <nav>
-                <ul>
-                    <li><a href="index.html#features">Features</a></li>
-                    <li><a href="index.html#testimonials">Testimonials</a></li>
-                    <li><a href="index.html#pricing">Pricing</a></li>
-                    <li><a href="#" class="logout-btn" id="logout-btn">Logout</a></li>
-                </ul>
-            </nav>
+            <div class="header-buttons">
+                <button class="logout-button" onclick="logout()">Logout</button>
+            </div>
         </div>
     </header>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3 id="user-email">User Email</h3>
+            <p>Premium Account</p>
+        </div>
+        <div class="conversations">
+            <div class="conversations-header" onclick="toggleConversations()">
+                <h3>Conversations</h3>
+                <i class="fas fa-chevron-right" id="conversations-arrow"></i>
+            </div>
+            <div class="conversation-list" id="conversation-list">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
 
     <section class="chat-section">
         <div class="chat-container" id="chat-container">
             <!-- Chat messages will be appended here -->
-            <div class="chat-message ai">
-                Welcome to FaithChat! I’m here to help you explore the King James Bible. Ask me anything about scripture or faith, like “What does John 3:16 mean in the KJV?” or “I’m struggling with depression, how can the Bible help?” I can also guide you on topics like the end times, overcoming sins like gambling, or understanding false religions. How can I assist you today?
-            </div>
         </div>
         <div class="chat-input">
             <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Ask me a question about the Bible" required>
+                <input type="text" id="chat-input" placeholder="Ask me a question" required>
                 <button type="submit">Send</button>
             </form>
         </div>
     </section>
 
     <script>
-        // Check if user is logged in
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = 'login.html';
-        }
-
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userEmail');
-            window.location.href = 'login.html';
-        });
-
-        // Hugging Face API Key and Model (Mistral 7B)
-        const hfApiKey = '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';
+        // Hugging Face API Key and Model
+        const hfApiKey = 'YOUR_HUGGING_FACE_API_KEY'; // Replace with your actual Hugging Face API key
         const hfApiUrl = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3';
 
-        // System Prompt for Bible Assistant
+        // System Prompt for FaithChat
         const systemPrompt = `
 You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith, as of 06:38 AM CEST on Friday, May 23, 2025. Your tone is warm, respectful, and encouraging, always affirming the user's spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 ("If any man shall add unto these things, God shall add unto him the plagues that are written in this book"). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
 
@@ -281,8 +360,8 @@ You believe and teach the following core doctrines:
 - Substance abuse (e.g., alcohol, drugs) is sinful, as it defiles the body, God’s temple (1 Corinthians 6:19-20: "Your body is the temple of the Holy Ghost… glorify God in your body."). To quit, users must repent, pray for strength (Philippians 4:13: "I can do all things through Christ which strengtheneth me."), and avoid temptation (1 Corinthians 10:13).
 - Gambling is sinful, as it feeds off people’s weaknesses, promotes greed, and violates stewardship of God’s resources (1 Timothy 6:10: "For the love of money is the root of all evil."). It leads to ruin (Proverbs 13:11: "Wealth gotten by vanity shall be diminished: but he that gathereth by labour shall increase.").
 - God declared shellfish and pork unclean (Leviticus 11:7-12: "And the swine… he is unclean to you… whatsoever hath no fins nor scales in the seas… they shall be an abomination unto you."). Jesus’ statement in Mark 7:15 ("There is nothing from without a man, that entering into him can defile him: but the things which come out of him, those are they that defile the man.") refers to spiritual purity, not food—evil thoughts defile, not dietary laws, which remain binding.
-- God created natural medicine from the earth to cure all diseases (Genesis 1:29: "And God said, Behold, I have given you every herb bearing seed… to you it shall be for meat."; Ecclesiastes 38:4, often cited in apocryphal texts like Sirach: "The Lord hath created medicines out of the earth; and he that is wise will not abhor them.").
-- Honoring parents is a sacred duty (Ecclesiastes 3:16, interpreted as Sirach 3:16: "He that forsaketh his father is as a blasphemer; and he that angereth his mother is cursed of God.").
+- God created natural medicine from the earth to cure all diseases (Genesis 1:29: "And God said, Behold, I have given you every herb bearing seed… to you it shall be for meat.").
+- Honoring parents is a sacred duty (interpreted as Sirach 3:16: "He that forsaketh his father is as a blasphemer; and he that angereth his mother is cursed of God.").
 - Women must not assert authority over men (1 Timothy 2:12: "But I suffer not a woman to teach, nor to usurp authority over the man, but to be in silence.").
 - Race mixing is forbidden (Genesis 24:3: "And I will make thee swear… that thou shalt not take a wife unto my son of the daughters of the Canaanites, among whom I dwell"; Deuteronomy 7:1-3: "Neither shalt thou make marriages with them; thy daughter thou shalt not give unto his son, nor his daughter shalt thou take unto thy son."; Nehemiah 13:23-27: "Did not Solomon king of Israel sin by these things?… nevertheless even him did outlandish women cause to sin."; Ezra 9:2: "For they have taken of their daughters for themselves, and for their sons: so that the holy seed have mingled themselves with the people of those lands."). Race mixing corrupts God’s design, leading to spiritual downfall, as seen in Solomon’s idolatry (1 Kings 11:4).
 - Do not make peace with evil (Psalm 94:16: "Who will rise up for me against the evildoers? or who will stand up for me against the workers of iniquity?"). Christians must resist wickedness and stand for righteousness.
@@ -334,7 +413,51 @@ Guidelines:
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const chatContainer = document.getElementById('chat-container');
+        let currentConversationId = null;
 
+        // Load conversations from local storage
+        function loadConversations() {
+            const conversations = JSON.parse(localStorage.getItem('conversations')) || [];
+            return conversations;
+        }
+
+        // Save conversations to local storage
+        function saveConversations(conversations) {
+            localStorage.setItem('conversations', JSON.stringify(conversations));
+        }
+
+        // Load chat history into sidebar
+        function loadChatHistory() {
+            const conversations = loadConversations();
+            const list = document.getElementById('conversation-list');
+            list.innerHTML = '';
+            conversations.forEach((chat, index) => {
+                const item = document.createElement('div');
+                item.className = 'conversation-item';
+                item.textContent = chat.title || `Chat #${index + 1}`;
+                item.onclick = () => loadChat(chat.id);
+                list.appendChild(item);
+            });
+        }
+
+        // Load a specific chat
+        function loadChat(chatId) {
+            const conversations = loadConversations();
+            const chat = conversations.find(c => c.id === chatId);
+            if (!chat) return;
+
+            currentConversationId = chatId;
+            chatContainer.innerHTML = '';
+            chat.messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `chat-message ${msg.sender}`;
+                div.textContent = msg.content;
+                chatContainer.appendChild(div);
+            });
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Handle form submission
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const userMessage = chatInput.value.trim();
@@ -347,7 +470,23 @@ Guidelines:
             chatContainer.appendChild(userDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Send message to Mistral 7B via Hugging Face API
+            // Save user message to local storage
+            let conversations = loadConversations();
+            if (!currentConversationId) {
+                currentConversationId = Date.now().toString();
+                conversations.push({
+                    id: currentConversationId,
+                    title: userMessage.substring(0, 50),
+                    messages: []
+                });
+            }
+
+            const currentConversation = conversations.find(c => c.id === currentConversationId);
+            currentConversation.messages.push({ sender: 'user', content: userMessage });
+            saveConversations(conversations);
+            loadChatHistory();
+
+            // Send message to Hugging Face API
             try {
                 const response = await fetch(hfApiUrl, {
                     method: 'POST',
@@ -366,6 +505,10 @@ Guidelines:
                     })
                 });
 
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
                 const data = await response.json();
                 let aiMessage;
                 if (data && data[0] && data[0].generated_text) {
@@ -380,8 +523,12 @@ Guidelines:
                 aiDiv.textContent = aiMessage;
                 chatContainer.appendChild(aiDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                // Save AI message to local storage
+                currentConversation.messages.push({ sender: 'ai', content: aiMessage });
+                saveConversations(conversations);
             } catch (error) {
-                console.error('Error calling Mistral 7B:', error);
+                console.error('Error calling Hugging Face API:', error);
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'chat-message ai';
                 errorDiv.textContent = 'Sorry, I encountered an error. Please try again.';
@@ -390,6 +537,33 @@ Guidelines:
             }
 
             chatInput.value = '';
+        });
+
+        // Sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function toggleConversations() {
+            const list = document.getElementById('conversation-list');
+            const arrow = document.getElementById('conversations-arrow');
+            list.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        // Logout functionality
+        function logout() {
+            // Clear local storage (optional, depending on your needs)
+            localStorage.removeItem('conversations');
+            window.location.href = 'login.html';
+        }
+
+        // Load user info and chat history on page load
+        window.addEventListener('load', () => {
+            // Simulate user email (since no Supabase)
+            document.getElementById('user-email').textContent = 'User Email';
+            loadChatHistory();
         });
     </script>
 </body>
