@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bible AI - Login</title>
+    <title>FaithChat - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -295,67 +295,6 @@
             width: 100%;
         }
 
-        .social-login {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .social-divider {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 25px 0;
-            color: var(--dark-gray);
-        }
-
-        .social-divider::before,
-        .social-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #ddd;
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .social-button {
-            padding: 12px 25px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid #ddd;
-            background: var(--white);
-            color: var(--dark-gray);
-        }
-
-        .social-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .social-button.google:hover {
-            border-color: #DB4437;
-            color: #DB4437;
-        }
-
-        .social-button.apple:hover {
-            border-color: #000;
-            color: #000;
-        }
-
-        .social-button.facebook:hover {
-            border-color: #1877F2;
-            color: #1877F2;
-        }
-
         /* Error Messages */
         .error-message {
             color: #dc3545;
@@ -374,16 +313,6 @@
             .login-header h1 {
                 font-size: 28px;
             }
-
-            .social-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .social-button {
-                width: 100%;
-                justify-content: center;
-            }
         }
     </style>
 </head>
@@ -397,7 +326,7 @@
     <header>
         <div class="header-container">
             <a href="index.html" class="logo">
-                <i class="fas fa-bible"></i> BibleAI
+                <i class="fas fa-bible"></i> FaithChat
             </a>
             <nav>
                 <a href="index.html" class="back-home">
@@ -442,28 +371,8 @@
                 </button>
             </form>
 
-            <div class="social-login">
-                <div class="social-divider">
-                    <span>Or continue with</span>
-                </div>
-                <div class="social-buttons">
-                    <div class="social-button google">
-                        <i class="fab fa-google"></i>
-                        Google
-                    </div>
-                    <div class="social-button apple">
-                        <i class="fab fa-apple"></i>
-                        Apple
-                    </div>
-                    <div class="social-button facebook">
-                        <i class="fab fa-facebook-f"></i>
-                        Facebook
-                    </div>
-                </div>
-            </div>
-
             <div class="signup-link">
-                Don't have an account? <a href="signup.html">Create account</a>
+                Don't have an account? <a href="payment.html">Create account</a>
             </div>
         </div>
     </section>
