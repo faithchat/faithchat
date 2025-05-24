@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaithChat - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --gold: #D4AF37;
@@ -29,7 +30,6 @@
             line-height: 1.6;
         }
 
-        /* Announcement Bar */
         .announcement-bar {
             background-color: var(--gold);
             color: var(--white);
@@ -40,7 +40,6 @@
             z-index: 1000;
         }
 
-        /* Header */
         header {
             background-color: var(--black);
             color: var(--white);
@@ -92,7 +91,6 @@
             transform: translateX(-3px);
         }
 
-        /* Login Section */
         .login-section {
             min-height: 100vh;
             display: flex;
@@ -295,7 +293,6 @@
             width: 100%;
         }
 
-        /* Error Messages */
         .error-message {
             color: #dc3545;
             font-size: 14px;
@@ -303,7 +300,6 @@
             display: none;
         }
 
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .login-container {
                 margin: 0 20px;
@@ -317,12 +313,10 @@
     </style>
 </head>
 <body>
-    <!-- Announcement Bar -->
     <div class="announcement-bar">
         <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
     </div>
 
-    <!-- Header -->
     <header>
         <div class="header-container">
             <a href="index.html" class="logo">
@@ -337,7 +331,6 @@
         </div>
     </header>
 
-    <!-- Login Section -->
     <section class="login-section">
         <div class="login-container">
             <div class="login-header">
@@ -372,40 +365,27 @@
             </form>
 
             <div class="signup-link">
-                Don't have an account? <a href="payment.html">Create account</a>
+                Don't have an account? <a href="signup.html">Create account</a>
             </div>
         </div>
     </section>
 
     <script>
-        // Admin credentials for client-side simulation
-        const adminCredentials = [
-            { email: "admin1@bibleai.org", password: "K7#mP9$xL2vNqW8!rT5j" },
-            { email: "admin2@bibleai.org", password: "Z3@nT6$yR8vQwL9!kX2m" },
-            { email: "admin3@bibleai.org", password: "P8#rM2$vN7xLtY5!wQ9j" },
-            { email: "admin4@bibleai.org", password: "J5@kW9$xQ3mRvT2!nL8y" },
-            { email: "admin5@bibleai.org", password: "X2#vL7$yM9tQwN6!rP8k" },
-            { email: "admin6@bibleai.org", password: "Q9@mT3$xL8vRwY5!nK2j" },
-            { email: "admin7@bibleai.org", password: "W6#rP8$yN2xLtQ9!vM5k" },
-            { email: "admin8@bibleai.org", password: "L3@kM9$xT7vRwN2!yQ8j" },
-            { email: "admin9@bibleai.org", password: "T5#vQ2$yL8xNmP9!rW6k" },
-            { email: "admin10@bibleai.org", password: "N8@mW6$xQ3vLtY2!rP9j" },
-            { email: "admin11@bibleai.org", password: "Y2#kP9$yM7xRwT5!vL8q" },
-            { email: "admin12@bibleai.org", password: "M6@rT3$xN8vQwL9!yP2k" },
-            { email: "admin13@bibleai.org", password: "R9#vL2$yQ7xMtN5!kW8j" },
-            { email: "admin14@bibleai.org", password: "K5@mW9$xT3vRyP8!nL2q" },
-            { email: "admin15@bibleai.org", password: "P3#rQ8$yL9xNvT2!mW6k" },
-            { email: "admin16@bibleai.org", password: "T8@kM2$xW7vRyQ9!nL5j" },
-            { email: "admin17@bibleai.org", password: "Q2#vP9$yT3xLmN8!rW6k" },
-            { email: "admin18@bibleai.org", password: "W9@mL3$xQ8vRtY2!nP5j" },
-            { email: "admin19@bibleai.org", password: "L5#rT2$yN9xQwM8!vP6k" },
-            { email: "admin20@bibleai.org", password: "N3@kQ8$xM7vRyT2!lW9j" },
-            { email: "admin21@bibleai.org", password: "Y6#vP3$yL8xNtQ9!mW2k" },
-            { email: "admin22@bibleai.org", password: "M8@rT9$xQ2vLyN5!kW3j" },
-            { email: "admin23@bibleai.org", password: "R2#kM9$yT8xQwL3!vP6n" },
-            { email: "admin24@bibleai.org", password: "T5@mW2$xN9vRyQ8!lP3j" },
-            { email: "admin25@bibleai.org", password: "P9#rQ3$yL2xMtN8!vW6k" }
-        ];
+        const supabase = Supabase.createClient(
+            'https://vczwqgqunhdwvqzytebm.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjendxZ3F1bmhkd3Zxenl0ZWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNjIzNTksImV4cCI6MjA2MzYzODM1OX0.x5US8mTSWQgx9cXEIxENrlys2HlGiFuzKXhKSgeW0Nw'
+        );
+
+        async function getIPAddress() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error('Error fetching IP:', error);
+                return null;
+            }
+        }
 
         function togglePassword() {
             const passwordField = document.getElementById('password');
@@ -420,7 +400,6 @@
             }
         }
 
-        // Form validation and submission handling
         const form = document.getElementById('loginForm');
         const emailField = document.getElementById('email');
         const passwordField = document.getElementById('password');
@@ -429,34 +408,36 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Show loading state
             submitBtn.classList.add('loading');
             submitBtn.setAttribute('disabled', 'true');
             submitBtn.querySelector('.button-text').style.visibility = 'hidden';
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const email = emailField.value;
+            const password = passwordField.value;
+            const ipAddress = await getIPAddress();
 
-            // Check credentials against admin list
-            const enteredEmail = emailField.value;
-            const enteredPassword = passwordField.value;
-            const isValidLogin = adminCredentials.some(cred => 
-                cred.email === enteredEmail && cred.password === enteredPassword
-            );
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-            if (isValidLogin) {
-                // Handle successful login
-                window.location.href = 'chat.html';
-            } else {
-                // Handle failed login
-                alert('Invalid email or password. Please try again.');
+            if (error) {
+                alert('Login failed: ' + error.message);
                 submitBtn.classList.remove('loading');
                 submitBtn.removeAttribute('disabled');
                 submitBtn.querySelector('.button-text').style.visibility = 'visible';
+                return;
             }
+
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({ last_login: new Date().toISOString(), ip_address: ipAddress })
+                .eq('id', data.user.id);
+
+            if (updateError) {
+                console.error('Error updating user data:', updateError.message);
+            }
+
+            window.location.href = 'chat.html';
         });
 
-        // Real-time validation
         emailField.addEventListener('input', validateForm);
         passwordField.addEventListener('input', validateForm);
 
