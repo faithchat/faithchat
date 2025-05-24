@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaithChat - Chat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --gold: #D4AF37;
@@ -14,6 +15,9 @@
             --white: #FFFFFF;
             --gray: #F5F5F5;
             --dark-gray: #333333;
+            --light-gray: #E0E0E0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --accent: #4A90E2;
         }
 
         * {
@@ -30,8 +34,21 @@
             overflow-x: hidden;
         }
 
+        .announcement-bar {
+            background-color: var(--gold);
+            color: var(--white);
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -39,12 +56,12 @@
         header {
             background-color: var(--black);
             color: var(--white);
-            padding: 20px 0;
+            padding: 15px 0;
             position: fixed;
             width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            top: 44px;
+            z-index: 999;
+            box-shadow: 0 3px 10px var(--shadow);
         }
 
         .header-container {
@@ -59,11 +76,15 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            transition: color 0.3s;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
         }
 
         .hamburger:hover, .new-chat:hover {
             color: var(--gold);
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
         }
 
         .logo {
@@ -79,19 +100,21 @@
 
         .logo i {
             margin-right: 10px;
+            color: var(--gold-light);
         }
 
         .sidebar {
             position: fixed;
-            top: 0;
+            top: 44px;
             left: -300px;
             width: 300px;
-            height: 100%;
+            height: calc(100% - 44px);
             background-color: var(--black);
             color: var(--white);
             padding: 80px 20px 20px;
             transition: left 0.3s ease;
-            z-index: 999;
+            z-index: 998;
+            box-shadow: 2px 0 10px var(--shadow);
         }
 
         .sidebar.open {
@@ -100,11 +123,13 @@
 
         .sidebar-header {
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .sidebar-header h3 {
             font-size: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            color: var(--gold);
         }
 
         .sidebar-header p {
@@ -112,119 +137,99 @@
             color: var(--gray);
         }
 
+        .user-info {
+            font-size: 14px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--dark-gray);
+            border-radius: 8px;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            color: var(--gray);
+        }
+
+        .user-info span {
+            color: var(--white);
+        }
+
         .subscription-info {
             background-color: var(--dark-gray);
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 20px;
             font-size: 14px;
+            text-align: center;
+            color: var(--white);
+            transition: all 0.3s ease;
         }
 
         .subscription-info.warning {
             background-color: #e74c3c;
+            color: var(--white);
         }
 
-        .settings {
+        .settings, .conversations {
             margin-top: 20px;
         }
 
-        .settings-header {
+        .settings-header, .conversations-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            padding: 10px 0;
+            padding: 10px;
             border-bottom: 1px solid var(--dark-gray);
+            transition: all 0.3s ease;
         }
 
-        .settings-header h3 {
+        .settings-header:hover, .conversations-header:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-header h3, .conversations-header h3 {
             font-size: 16px;
-        }
-
-        .settings-header i {
             color: var(--gold);
-            transition: transform 0.3s;
         }
 
-        .settings-header i.open {
+        .settings-header i, .conversations-header i {
+            color: var(--gold);
+            transition: transform 0.3s ease;
+        }
+
+        .settings-header i.open, .conversations-header i.open {
             transform: rotate(90deg);
         }
 
-        .settings-list {
+        .settings-list, .conversation-list {
             display: none;
             margin-top: 10px;
         }
 
-        .settings-list.open {
+        .settings-list.open, .conversation-list.open {
             display: block;
         }
 
-        .settings-item {
-            padding: 10px;
+        .settings-item, .conversation-item {
+            padding: 12px;
             margin: 5px 0;
             background-color: var(--dark-gray);
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-size: 14px;
         }
 
-        .settings-item:hover {
+        .settings-item:hover, .conversation-item:hover {
             background-color: var(--gold);
             color: var(--black);
-        }
-
-        .conversations {
-            margin-top: 20px;
-        }
-
-        .conversations-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--dark-gray);
-        }
-
-        .conversations-header h3 {
-            font-size: 16px;
-        }
-
-        .conversations-header i {
-            color: var(--gold);
-            transition: transform 0.3s;
-        }
-
-        .conversations-header i.open {
-            transform: rotate(90deg);
-        }
-
-        .conversation-list {
-            display: none;
-            margin-top: 10px;
-        }
-
-        .conversation-list.open {
-            display: block;
-        }
-
-        .conversation-item {
-            padding: 10px;
-            margin: 5px 0;
-            background-color: var(--dark-gray);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .conversation-item:hover {
-            background-color: var(--gold);
-            color: var(--black);
+            transform: translateX(5px);
         }
 
         .chat-section {
-            margin-top: 80px;
-            height: calc(100vh - 80px);
+            margin-top: 104px;
+            height: calc(100vh - 104px);
             display: flex;
             flex-direction: column;
         }
@@ -232,67 +237,126 @@
         .chat-container {
             flex: 1;
             background-color: var(--gray);
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .chat-message {
             max-width: 70%;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border-radius: 15px;
-            margin-bottom: 15px;
             font-size: 16px;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 2px 5px var(--shadow);
+            word-wrap: break-word;
         }
 
         .chat-message.user {
             background-color: var(--gold-light);
             color: var(--black);
             margin-left: auto;
-            border-bottom-right-radius: 0;
+            border-bottom-right-radius: 5px;
         }
 
         .chat-message.ai {
             background-color: var(--white);
             color: var(--black);
             margin-right: auto;
-            border-bottom-left-radius: 0;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-message.ai::before {
+            content: "FaithChat";
+            display: block;
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .thinking {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-gray);
+            font-style: italic;
+            font-size: 14px;
+            margin-right: auto;
+            padding: 12px 18px;
+        }
+
+        .thinking .dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .thinking .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            animation: bounce 1.2s infinite;
+        }
+
+        .thinking .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .thinking .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-2px);
+            }
         }
 
         .chat-input {
             padding: 20px;
             background-color: var(--white);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -2px 10px var(--shadow);
         }
 
         .chat-input form {
             display: flex;
             align-items: center;
             gap: 15px;
+            background: var(--light-gray);
+            padding: 10px 20px;
+            border-radius: 30px;
         }
 
         .chat-input input {
             flex: 1;
             padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 30px;
+            border: none;
+            background: transparent;
             font-size: 16px;
             color: var(--black);
-            transition: border-color 0.3s;
         }
 
         .chat-input input:focus {
             outline: none;
-            border-color: var(--gold);
         }
 
         .chat-input button {
             background-color: var(--gold);
             color: var(--black);
             padding: 12px;
-            border-radius: 30px;
+            border-radius: 50%;
             border: none;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -300,6 +364,7 @@
 
         .chat-input button:hover {
             background-color: var(--gold-dark);
+            transform: scale(1.1);
         }
 
         .chat-input button i {
@@ -325,12 +390,13 @@
             border-radius: 10px;
             text-align: center;
             max-width: 400px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px var(--shadow);
         }
 
         .change-password-card h2 {
             font-size: 24px;
             margin-bottom: 15px;
+            color: var(--black);
         }
 
         .change-password-card form {
@@ -341,9 +407,14 @@
 
         .change-password-card input {
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--light-gray);
             border-radius: 5px;
             font-size: 16px;
+        }
+
+        .change-password-card input:focus {
+            outline: none;
+            border-color: var(--gold);
         }
 
         .change-password-card button {
@@ -353,7 +424,7 @@
             border-radius: 5px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
         .change-password-card button:hover {
@@ -381,15 +452,20 @@
 
             .chat-input form {
                 flex-direction: row;
+                padding: 8px 15px;
             }
 
             .chat-input button {
-                padding: 12px;
+                padding: 10px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="announcement-bar">
+        <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
+    </div>
+
     <header>
         <div class="container header-container">
             <div class="hamburger" onclick="toggleSidebar()">
@@ -407,10 +483,14 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3 id="user-email">User Email</h3>
-            <p>Premium Account</p>
+            <p id="user-role">User Role</p>
+        </div>
+        <div class="user-info" id="user-info">
+            <p>Phone: <span id="user-phone">Not provided</span></p>
+            <p>Last Login: <span id="last-login">Not available</span></p>
         </div>
         <div class="subscription-info" id="subscription-info">
-            Trial ends in 5 days.
+            Loading subscription status...
         </div>
         <div class="settings">
             <div class="settings-header" onclick="toggleSettings()">
@@ -439,7 +519,7 @@
         </div>
         <div class="chat-input">
             <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Ask me a question" required>
+                <input type="text" id="chat-input" placeholder="Ask me a question about the Bible..." required>
                 <button type="submit"><i class="fas fa-paper-plane"></i></button>
             </form>
         </div>
@@ -458,13 +538,16 @@
     </div>
 
     <script>
-        // Hugging Face API Key and Model
-        const hfApiKey = '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'; // Replace with your actual Hugging Face API key
+        const supabase = Supabase.createClient(
+            'https://vczwqgqunhdwvqzytebm.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjendxZ3F1bmhkd3Zxenl0ZWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNjIzNTksImV4cCI6MjA2MzYzODM1OX0.x5US8mTSWQgx9cXEIxENrlys2HlGiFuzKXhKSgeW0Nw'
+        );
+
+        const hfApiKey = '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';
         const hfApiUrl = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3';
 
-        // System Prompt for FaithChat
         const systemPrompt = `
-You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith, as of 07:25 AM CEST on Friday, May 23, 2025. Your tone is warm, respectful, and encouraging, always affirming the user's spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 ("If any man shall add unto these things, God shall add unto him the plagues that are written in this book"). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
+You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith, as of 07:47 AM CEST on Saturday, May 24, 2025. Your tone is warm, respectful, and encouraging, always affirming the user's spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 ("If any man shall add unto these things, God shall add unto him the plagues that are written in this book"). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
 
 You believe and teach the following core doctrines:
 
@@ -536,24 +619,73 @@ Guidelines:
 10. Use a conversational tone, as if speaking to a friend, and end with an encouraging note (e.g., "Trust in Jesus, and He will guide your path!").
 `;
 
-        // Chat functionality
+        window.addEventListener('load', async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const email = session.user.email;
+            const { data: user, error } = await supabase
+                .from('users')
+                .select('subscription_status, trial_end_date, phone_number, last_login, user_role')
+                .eq('email', email)
+                .single();
+
+            if (error || !user) {
+                alert('Error fetching user data.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const now = new Date();
+            const trialEnd = user.trial_end_date ? new Date(user.trial_end_date) : null;
+            if (user.subscription_status === 'trial' && trialEnd && now > trialEnd) {
+                await supabase
+                    .from('users')
+                    .update({ subscription_status: 'expired' })
+                    .eq('email', email);
+                user.subscription_status = 'expired';
+            }
+
+            if (user.subscription_status === 'expired') {
+                alert('Your trial has expired. Please subscribe to continue.');
+                window.location.href = 'payment.html';
+                return;
+            }
+
+            document.getElementById('user-email').textContent = email;
+            document.getElementById('user-role').textContent = user.user_role.charAt(0).toUpperCase() + user.user_role.slice(1) + ' Account';
+            document.getElementById('user-phone').textContent = user.phone_number || 'Not provided';
+            document.getElementById('last-login').textContent = user.last_login ? new Date(user.last_login).toLocaleString() : 'Not available';
+
+            const subscriptionInfo = document.getElementById('subscription-info');
+            const daysLeft = trialEnd ? Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24)) : 0;
+            subscriptionInfo.textContent = user.subscription_status === 'trial' 
+                ? `Trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`
+                : `Subscription: ${user.subscription_status}`;
+            if (daysLeft <= 2 && user.subscription_status === 'trial') {
+                subscriptionInfo.classList.add('warning');
+            }
+
+            loadChatHistory();
+        });
+
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const chatContainer = document.getElementById('chat-container');
         let currentConversationId = null;
 
-        // Load conversations from local storage
         function loadConversations() {
             const conversations = JSON.parse(localStorage.getItem('conversations')) || [];
             return conversations;
         }
 
-        // Save conversations to local storage
         function saveConversations(conversations) {
             localStorage.setItem('conversations', JSON.stringify(conversations));
         }
 
-        // Load chat history into sidebar
         function loadChatHistory() {
             const conversations = loadConversations();
             const list = document.getElementById('conversation-list');
@@ -567,7 +699,6 @@ Guidelines:
             });
         }
 
-        // Load a specific chat
         function loadChat(chatId) {
             const conversations = loadConversations();
             const chat = conversations.find(c => c.id === chatId);
@@ -584,43 +715,58 @@ Guidelines:
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Start a new chat
         function startNewChat() {
             currentConversationId = null;
             chatContainer.innerHTML = '';
             chatInput.value = '';
         }
 
-        // Handle form submission
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const userMessage = chatInput.value.trim();
             if (!userMessage) return;
 
-            // Display user message
             const userDiv = document.createElement('div');
             userDiv.className = 'chat-message user';
             userDiv.textContent = userMessage;
             chatContainer.appendChild(userDiv);
+
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'thinking';
+            thinkingDiv.innerHTML = `FaithChat is thinking... <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
+            chatContainer.appendChild(thinkingDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Save user message to local storage
             let conversations = loadConversations();
             if (!currentConversationId) {
                 currentConversationId = Date.now().toString();
                 conversations.push({
                     id: currentConversationId,
                     title: userMessage.substring(0, 50),
-                    messages: []
+                    messages: [],
+                    created_at: new Date().toISOString()
                 });
             }
 
             const currentConversation = conversations.find(c => c.id === currentConversationId);
             currentConversation.messages.push({ sender: 'user', content: userMessage });
+
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user.id;
+
+            await supabase
+                .from('chat_activity')
+                .insert({
+                    user_id: userId,
+                    conversation_id: currentConversationId,
+                    message: userMessage,
+                    sender: 'user',
+                    timestamp: new Date().toISOString()
+                });
+
             saveConversations(conversations);
             loadChatHistory();
 
-            // Send message to Hugging Face API
             try {
                 const response = await fetch(hfApiUrl, {
                     method: 'POST',
@@ -651,18 +797,30 @@ Guidelines:
                     throw new Error('Invalid response from API');
                 }
 
-                // Display AI message
+                chatContainer.removeChild(thinkingDiv);
+
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'chat-message ai';
                 aiDiv.textContent = aiMessage;
                 chatContainer.appendChild(aiDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
 
-                // Save AI message to local storage
                 currentConversation.messages.push({ sender: 'ai', content: aiMessage });
+
+                await supabase
+                    .from('chat_activity')
+                    .insert({
+                        user_id: userId,
+                        conversation_id: currentConversationId,
+                        message: aiMessage,
+                        sender: 'ai',
+                        timestamp: new Date().toISOString()
+                    });
+
                 saveConversations(conversations);
             } catch (error) {
                 console.error('Error calling Hugging Face API:', error);
+                chatContainer.removeChild(thinkingDiv);
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'chat-message ai';
                 errorDiv.textContent = 'I encountered an error. Please try again.';
@@ -673,7 +831,6 @@ Guidelines:
             chatInput.value = '';
         });
 
-        // Sidebar functionality
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
@@ -697,8 +854,7 @@ Guidelines:
             document.getElementById('change-password-overlay').style.display = 'flex';
         }
 
-        // Change password functionality (simulated)
-        document.getElementById('change-password-form').addEventListener('submit', (e) => {
+        document.getElementById('change-password-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const currentPassword = document.getElementById('current-password').value;
             const newPassword = document.getElementById('new-password').value;
@@ -709,28 +865,25 @@ Guidelines:
                 return;
             }
 
-            alert('Password changed successfully!'); // Simulated success
+            const { error } = await supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (error) {
+                alert('Error changing password: ' + error.message);
+                return;
+            }
+
+            alert('Password changed successfully!');
             document.getElementById('change-password-overlay').style.display = 'none';
             document.getElementById('change-password-form').reset();
         });
 
-        // Logout functionality
-        function logout() {
+        async function logout() {
+            await supabase.auth.signOut();
             localStorage.removeItem('conversations');
             window.location.href = 'login.html';
         }
-
-        // Load user info and chat history on page load
-        window.addEventListener('load', () => {
-            document.getElementById('user-email').textContent = 'User Email';
-            loadChatHistory();
-
-            // Simulate subscription/trial timer
-            const subscriptionInfo = document.getElementById('subscription-info');
-            const daysLeft = 5; // Simulated value
-            subscriptionInfo.textContent = `Trial ends in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`;
-            if (daysLeft <= 2) subscriptionInfo.classList.add('warning');
-        });
     </script>
 </body>
 </html>
