@@ -6,6 +6,7 @@
     <title>FaithChat - Payment</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.paypal.com/sdk/js?client-id=AVPO3FzIYpZHUBmh25OqjImDM3y-pGKeHmeJGsNiKr3kKatEO8Rb1xJR9WO31Vk-9-vUleW-JqgUUxXA&components=buttons¤cy=USD"></script>
+    <script src="app.js"></script>
     <style>
         :root {
             --gold: #D4AF37;
@@ -37,7 +38,6 @@
             padding: 0 20px;
         }
         
-        /* Announcement Bar */
         .announcement-bar {
             background-color: var(--gold);
             color: var(--white);
@@ -47,7 +47,6 @@
             position: relative;
         }
         
-        /* Header Styles */
         header {
             background-color: var(--black);
             color: var(--white);
@@ -136,7 +135,6 @@
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
         
-        /* Payment Section */
         .payment-section {
             padding: 60px 0;
             background-color: var(--gray);
@@ -179,46 +177,6 @@
             font-size: 20px;
             color: var(--black);
             margin-bottom: 15px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            color: var(--dark-gray);
-            margin-bottom: 5px;
-        }
-        
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            color: var(--black);
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--gold);
-        }
-        
-        .form-group.error input,
-        .form-group.error select {
-            border-color: #e74c3c;
-        }
-        
-        .error-message {
-            color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
         }
         
         .payment-methods {
@@ -279,7 +237,6 @@
             opacity: 1;
         }
         
-        /* Responsive Styles */
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
@@ -319,12 +276,10 @@
     </style>
 </head>
 <body>
-    <!-- Announcement Bar -->
     <div class="announcement-bar">
         <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
     </div>
 
-    <!-- Header -->
     <header>
         <div class="container header-container">
             <a href="index.html" class="logo">
@@ -344,7 +299,6 @@
         </div>
     </header>
 
-    <!-- Payment Section -->
     <section class="payment-section">
         <div class="container payment-container">
             <div class="section-title">
@@ -352,7 +306,6 @@
                 <p>Choose your plan and start your subscription today.</p>
             </div>
             <form id="payment-form" class="payment-form">
-                <!-- Plan Selection -->
                 <div class="form-section">
                     <h3>Choose Your Plan</h3>
                     <div class="payment-methods">
@@ -367,20 +320,18 @@
                     </div>
                 </div>
 
-                <!-- Payment Method -->
                 <div class="form-section">
                     <h3>Payment Method</h3>
                     <div class="payment-methods">
                         <label class="payment-option" for="payment-paypal">
                             <input type="radio" id="payment-paypal" name="payment-method" value="paypal" checked>
                             PayPal
-                            <img src="paypal.png" class="payment-badge" alt="PayPal">
+                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" class="payment-badge" alt="PayPal">
                         </label>
                         <div id="paypal-button-container"></div>
                     </div>
                 </div>
 
-                <!-- Secure Checkout -->
                 <div class="secure-checkout">
                     <i class="fas fa-lock"></i>
                     <span>Secure Checkout: All transactions are encrypted</span>
@@ -388,75 +339,5 @@
             </form>
         </div>
     </section>
-
-    <script>
-        // Initialize PayPal Buttons
-        const form = document.getElementById('payment-form');
-        const paypalContainer = document.getElementById('paypal-button-container');
-
-        // Plan IDs (to be replaced with actual PayPal plan IDs)
-        const planIds = {
-            monthly: 'P-MONTHLY-PLAN-ID', // Replace with actual PayPal plan ID
-            yearly: 'P-YEARLY-PLAN-ID'   // Replace with actual PayPal plan ID
-        };
-
-        // Render PayPal Button
-        paypal.Buttons({
-            style: {
-                shape: 'rect',
-                color: 'gold',
-                layout: 'vertical',
-                label: 'subscribe'
-            },
-            createSubscription: function(data, actions) {
-                const plan = document.querySelector('input[name="plan"]:checked').value;
-                return actions.subscription.create({
-                    plan_id: planIds[plan],
-                    application_context: {
-                        return_url: 'https://example.com/success',
-                        cancel_url: 'https://example.com/cancel'
-                    }
-                });
-            },
-            onApprove: function(data, actions) {
-                // Send subscription data to backend
-                fetch('http://localhost:8080/api/subscriptions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        subscriptionId: data.subscriptionID,
-                        plan: document.querySelector('input[name="plan"]:checked').value
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Subscription created successfully!');
-                    window.location.href = '/success.html'; // Replace with your success page
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to create subscription. Please try again.');
-                });
-            },
-            onError: function(err) {
-                console.error('PayPal Error:', err);
-                alert('An error occurred with PayPal. Please try again.');
-            }
-        }).render('#paypal-button-container');
-
-        // Toggle active plan
-        document.querySelectorAll('input[name="plan"]').forEach(option => {
-            option.addEventListener('change', () => {
-                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
-                option.parentElement.classList.add('active');
-            });
-        });
-
-        // Show PayPal button on form submission
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            paypalContainer.style.display = 'block';
-        });
-    </script>
 </body>
 </html>
