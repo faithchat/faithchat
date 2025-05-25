@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaithChat - Learn the Truth About the Bible in Seconds</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Add Swiper CSS for carousel -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         :root {
             --gold: #D4AF37;
@@ -140,12 +138,13 @@
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero-image.png') no-repeat center center/cover;
-            height: 100vh;
+            width: 100%; /* Full width, touches edges */
+            height: 60vh; /* Reasonable height, not square */
             display: flex;
             align-items: center;
             text-align: center;
             color: var(--white);
-            padding-top: 80px;
+            padding: 20px;
         }
         
         .hero-content {
@@ -190,13 +189,6 @@
             background-color: var(--gold);
             color: var(--black);
             transform: translateY(-2px);
-        }
-        
-        /* Ensure no carousel controls in hero */
-        .hero .swiper-button-next,
-        .hero .swiper-button-prev,
-        .hero .swiper-pagination {
-            display: none !important;
         }
         
         /* Features Section */
@@ -270,11 +262,12 @@
             background-color: var(--white);
         }
         
-        .swiper-container {
-            width: 100%;
+        .testimonials-list {
             max-width: 800px;
             margin: 0 auto;
-            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         
         .testimonial-card {
@@ -320,15 +313,6 @@
         .author-info .location {
             font-size: 12px;
             color: var(--gold);
-        }
-        
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: var(--gold);
-        }
-        
-        .swiper-pagination-bullet {
-            background: var(--gold);
         }
         
         /* Pricing */
@@ -567,7 +551,8 @@
             }
             
             .hero {
-                padding-top: 100px;
+                height: 50vh; /* Slightly shorter on mobile */
+                padding: 20px;
             }
             
             .hero h1 {
@@ -730,79 +715,62 @@
                 <h2>Trusted by Thousands</h2>
                 <p>See how FaithChat is transforming Bible study for believers around the world.</p>
             </div>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"I've been using FaithChat for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
-                            <div class="testimonial-author">
-                                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Pastor David L.">
-                                <div class="author-info">
-                                    <h4>Pastor David L.</h4>
-                                    <p>Church Leader</p>
-                                    <p class="location">Texas, USA</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. FaithChat answers my questions in language I can understand and has helped me grow so much."</p>
-                            <div class="testimonial-author">
-                                <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
-                                <div class="author-info">
-                                    <h4>Sarah J.</h4>
-                                    <p>New Believer</p>
-                                    <p class="location">London, UK</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"The depth of knowledge in this platform is astounding. I've discovered connections between scriptures I never would have found on my own."</p>
-                            <div class="testimonial-author">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T.">
-                                <div class="author-info">
-                                    <h4>Michael T.</h4>
-                                    <p>Bible Study Leader</p>
-                                    <p class="location">Ontario, Canada</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"FaithChat has deepened my understanding of scripture and made my daily devotions more meaningful."</p>
-                            <div class="testimonial-author">
-                                <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Emily R.">
-                                <div class="author-info">
-                                    <h4>Emily R.</h4>
-                                    <p>Faithful Member</p>
-                                    <p class="location">Sydney, Australia</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">"This tool has made group Bible studies so much richer. The AI explanations are clear and insightful."</p>
-                            <div class="testimonial-author">
-                                <img src="https://randomuser.me/api/portraits/women/58.jpg" alt="Rachel M.">
-                                <div class="author-info">
-                                    <h4>Rachel M.</h4>
-                                    <p>Small Group Leader</p>
-                                    <p class="location">Florida, USA</p>
-                                </div>
-                            </div>
+            <div class="testimonials-list">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I've been using FaithChat for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Pastor David L.">
+                        <div class="author-info">
+                            <h4>Pastor David L.</h4>
+                            <p>Church Leader</p>
+                            <p class="location">Texas, USA</p>
                         </div>
                     </div>
                 </div>
-                <!-- Add Pagination -->
-                <div class="swiper-pagination"></div>
-                <!-- Add Navigation -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. FaithChat answers my questions in language I can understand and has helped me grow so much."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
+                        <div class="author-info">
+                            <h4>Sarah J.</h4>
+                            <p>New Believer</p>
+                            <p class="location">London, UK</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The depth of knowledge in this platform is astounding. I've discovered connections between scriptures I never would have found on my own."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T.">
+                        <div class="author-info">
+                            <h4>Michael T.</h4>
+                            <p>Bible Study Leader</p>
+                            <p class="location">Ontario, Canada</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"FaithChat has deepened my understanding of scripture and made my daily devotions more meaningful."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Emily R.">
+                        <div class="author-info">
+                            <h4>Emily R.</h4>
+                            <p>Faithful Member</p>
+                            <p class="location">Sydney, Australia</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"This tool has made group Bible studies so much richer. The AI explanations are clear and insightful."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/58.jpg" alt="Rachel M.">
+                        <div class="author-info">
+                            <h4>Rachel M.</h4>
+                            <p>Small Group Leader</p>
+                            <p class="location">Florida, USA</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -931,33 +899,6 @@
                 console.error('Error tracking visitor:', error);
             }
         }
-    </script>
-    <!-- Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        var swiper = new Swiper('.swiper-container', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            loop: true,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                768: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 20,
-                },
-            },
-        });
     </script>
 </body>
 </html>
