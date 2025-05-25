@@ -1,8 +1,9 @@
 import express from "express";
 import "dotenv/config";
-import { Client, Environment, SubscriptionsController } from "@paypal/paypal-server-sdk";
+import { Client, Environment, VaultController, ApiError } from "@paypal/paypal-server-sdk";
 import bodyParser from "body-parser";
 import cors from "cors";
+import { v4 as uuidv4 } from "uuid";
 
 const app = express();
 app.use(bodyParser.json());
@@ -23,95 +24,79 @@ const client = new Client({
     environment: Environment.Live, // Change to Environment.Sandbox for testing
 });
 
-const subscriptionsController = new SubscriptionsController(client);
+const vaultController = new VaultController(client);
 
-async function createSubscriptionPlans() {
-    const monthlyPlan = {
-        body: {
-            name: "FaithChat AI Monthly Subscription",
-            description: "Monthly subscription for FaithChat AI",
-            status: "ACTIVE",
-            billing_cycles: [
-                {
-                    frequency: { interval_unit: "MONTH", interval_count: 1 },
-                    tenure_type: "REGULAR",
-                    sequence: 1,
-                    total_cycles: 0,
-                    pricing_scheme: { fixed_price: { value: "19.99", currency_code: "USD" } }
-                }
-            ],
-            payment_preferences: {
-                auto_bill_outstanding: true,
-                payment_failure_threshold: 3
-            },
-            taxes: { percentage: "0", inclusive: false }
-        }
+async function createVaultSetupToken(req) {
+    const collect = {
+        paypalRequestId: uuidv4(),
+        body: req.body,
     };
-
-    const yearlyPlan = {
-        body: {
-            name: "FaithChat AI Yearly Subscription",
-            description: "Yearly subscription for FaithChat AI",
-            status: "ACTIVE",
-            billing_cycles: [
-                {
-                    frequency: { interval_unit: "YEAR", interval_count: 1 },
-                    tenure_type: "REGULAR",
-                    sequence: 1,
-                    total_cycles: 0,
-                    pricing_scheme: { fixed_price: { value: "191.88", currency_code: "USD" } }
-                }
-            ],
-            payment_preferences: {
-                auto_bill_outstanding: true,
-                payment_failure_threshold: 3
-            },
-            taxes: { percentage: "0", inclusive: false }
-        }
-    };
-
     try {
-        const productResponse = await subscriptionsController.createProduct({
-            body: {
-                name: "FaithChat AI",
-                description: "AI-powered Bible study tool",
-                type: "SERVICE"
-            }
-        });
-        const productId = productResponse.result.id;
-        monthlyPlan.body.product_id = productId;
-        yearlyPlan.body.product_id = productId;
-
-        const monthlyPlanResponse = await subscriptionsController.createPlan(monthlyPlan);
-        console.log("Monthly Plan ID:", monthlyPlanResponse.result.id);
-
-        const yearlyPlanResponse = await subscriptionsController.createPlan(yearlyPlan);
-        console.log("Yearly Plan ID:", yearlyPlanResponse.result.id);
-
+        const { result } = await vaultController.setupTokensCreate(collect);
         return {
-            monthlyPlanId: monthlyPlanResponse.result.id,
-            yearlyPlanId: yearlyPlanResponse.result.id
+            id: result.id,
+            status: result.status,
         };
     } catch (error) {
-        console.error("Error creating plans:", error);
+        if (error instanceof ApiError) {
+            throw new Error(JSON.stringify(error.result || error.message));
+        }
         throw error;
     }
 }
 
-// Run this manually to create plans and store the IDs
-// createSubscriptionPlans().then(plans => console.log(plans));
+async function createPaymentToken(req) {
+    const collect = {
+        paypalRequestId: uuidv4(),
+        body: req.body,
+    };
+    try {
+        const { result } = await vaultController.paymentTokensCreate(collect);
+        return {
+            id: result.id,
+            status: result.status,
+        };
+    } catch (error) {
+        if (error instanceof ApiError) {
+            throw new Error(JSON.stringify(error.result || error.message));
+        }
+        throw error;
+    }
+}
+
+app.post("/api/vault", async (req, res) => {
+    try {
+        const setupToken = await createVaultSetupToken(req);
+        res.status(200).json(setupToken);
+    } catch (error) {
+        console.error("Failed to create setup token:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post("/api/vault/payment-tokens", async (req, res) => {
+    try {
+        const paymentToken = await createPaymentToken(req);
+        res.status(200).json(paymentToken);
+    } catch (error) {
+        console.error("Failed to create payment token:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.post("/api/subscriptions", async (req, res) => {
     try {
-        const { subscriptionId, plan } = req.body;
-        console.log("Subscription created:", { subscriptionId, plan });
-        res.status(200).json({ status: "success", subscriptionId });
+        const { paymentTokenId, plan } = req.body;
+        console.log("Subscription created:", { paymentTokenId, plan });
+        // Store paymentTokenId and plan in your database
+        res.status(200).json({ status: "success", paymentTokenId });
     } catch (error) {
-        console.error("Error storing subscription:", error);
+        console.error("Error storing subscription:", error.message);
         res.status(500).json({ error: "Failed to store subscription." });
     }
 });
 
 app.listen(PORT, () => {
     console.log(`Node server listening at http://monday-modules.gl.at.ply.gg:${PORT}/`);
+    console.log(`Access payment page at http://monday-modules.gl.at.ply.gg:${PORT}/payment.html`);
 });
