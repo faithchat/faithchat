@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaithChat - Learn the Truth About the Bible in Seconds</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Add Swiper CSS for carousel -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         :root {
             --gold: #D4AF37;
@@ -137,7 +139,7 @@
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80') no-repeat center center/cover;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero-image.png') no-repeat center center/cover;
             height: 100vh;
             display: flex;
             align-items: center;
@@ -188,6 +190,13 @@
             background-color: var(--gold);
             color: var(--black);
             transform: translateY(-2px);
+        }
+        
+        /* Ensure no carousel controls in hero */
+        .hero .swiper-button-next,
+        .hero .swiper-button-prev,
+        .hero .swiper-pagination {
+            display: none !important;
         }
         
         /* Features Section */
@@ -261,10 +270,11 @@
             background-color: var(--white);
         }
         
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+        .swiper-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
         .testimonial-card {
@@ -272,6 +282,7 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
         }
         
         .testimonial-text {
@@ -284,6 +295,7 @@
         .testimonial-author {
             display: flex;
             align-items: center;
+            justify-content: center;
         }
         
         .testimonial-author img {
@@ -303,6 +315,20 @@
         .author-info p {
             color: var(--dark-gray);
             font-size: 12px;
+        }
+        
+        .author-info .location {
+            font-size: 12px;
+            color: var(--gold);
+        }
+        
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--gold);
+        }
+        
+        .swiper-pagination-bullet {
+            background: var(--gold);
         }
         
         /* Pricing */
@@ -505,6 +531,12 @@
             transform: translateY(-3px);
         }
         
+        .social-links img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+        
         .copyright {
             text-align: center;
             padding-top: 15px;
@@ -631,7 +663,7 @@
             <h1>Discover Biblical Truth <span>in Seconds</span> with AI</h1>
             <p>Get instant, accurate answers to all your Bible questions. Our AI-powered platform helps you understand scripture like never before.</p>
             <div class="hero-buttons">
-                <a href="payment.html?plan=monthly" class="cta-button" id="hero-cta">Start 1-Week Free Trial</a>
+                <a href="payment.html?plan=monthly" class="cta-button" id="hero-cta">Get Started</a>
                 <button class="secondary-button">See How It Works</button>
             </div>
         </div>
@@ -698,37 +730,79 @@
                 <h2>Trusted by Thousands</h2>
                 <p>See how FaithChat is transforming Bible study for believers around the world.</p>
             </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"I've been using FaithChat for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Pastor David L.">
-                        <div class="author-info">
-                            <h4>Pastor David L.</h4>
-                            <p>Church Leader</p>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text">"I've been using FaithChat for my sermon preparation and it's saved me hours of research. The historical context features are incredibly valuable."</p>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Pastor David L.">
+                                <div class="author-info">
+                                    <h4>Pastor David L.</h4>
+                                    <p>Church Leader</p>
+                                    <p class="location">Texas, USA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. FaithChat answers my questions in language I can understand and has helped me grow so much."</p>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
+                                <div class="author-info">
+                                    <h4>Sarah J.</h4>
+                                    <p>New Believer</p>
+                                    <p class="location">London, UK</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text">"The depth of knowledge in this platform is astounding. I've discovered connections between scriptures I never would have found on my own."</p>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T.">
+                                <div class="author-info">
+                                    <h4>Michael T.</h4>
+                                    <p>Bible Study Leader</p>
+                                    <p class="location">Ontario, Canada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text">"FaithChat has deepened my understanding of scripture and made my daily devotions more meaningful."</p>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Emily R.">
+                                <div class="author-info">
+                                    <h4>Emily R.</h4>
+                                    <p>Faithful Member</p>
+                                    <p class="location">Sydney, Australia</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text">"This tool has made group Bible studies so much richer. The AI explanations are clear and insightful."</p>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/58.jpg" alt="Rachel M.">
+                                <div class="author-info">
+                                    <h4>Rachel M.</h4>
+                                    <p>Small Group Leader</p>
+                                    <p class="location">Florida, USA</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"As someone new to the Bible, I was overwhelmed. FaithChat answers my questions in language I can understand and has helped me grow so much."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
-                        <div class="author-info">
-                            <h4>Sarah J.</h4>
-                            <p>New Believer</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"The depth of knowledge in this platform is astounding. I've discovered connections between scriptures I never would have found on my own."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T.">
-                        <div class="author-info">
-                            <h4>Michael T.</h4>
-                            <p>Bible Study Leader</p>
-                        </div>
-                    </div>
-                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
         </div>
     </section>
@@ -738,7 +812,7 @@
         <div class="container">
             <div class="section-title">
                 <h2>Simple, Affordable Pricing</h2>
-                <p>Choose the plan that works for you. Start with a 1-week free trial.</p>
+                <p>Choose the plan that works for you. Join thousands of believers today.</p>
             </div>
             <div class="pricing-grid">
                 <div class="pricing-card popular">
@@ -754,7 +828,7 @@
                         <li>Daily insights</li>
                         <li>Priority support</li>
                     </ul>
-                    <a href="payment.html?plan=monthly" class="cta-button">Start Free Trial</a>
+                    <a href="payment.html?plan=monthly" class="cta-button">Get Started</a>
                     <div class="payment-badges">
                         <img src="visa.png" class="payment-badge" alt="Visa">
                         <img src="mastercard.png" class="payment-badge" alt="Mastercard">
@@ -776,7 +850,7 @@
                         <li>Extended support hours</li>
                         <li>Special member badge</li>
                     </ul>
-                    <a href="payment.html?plan=yearly" class="cta-button">Start Free Trial</a>
+                    <a href="payment.html?plan=yearly" class="cta-button">Get Started</a>
                     <div class="payment-badges">
                         <img src="visa.png" class="payment-badge" alt="Visa">
                         <img src="mastercard.png" class="payment-badge" alt="Mastercard">
@@ -793,8 +867,8 @@
     <section class="cta-section">
         <div class="container">
             <h2>Ready to Transform Your Bible Study?</h2>
-            <p>Join thousands of believers who are growing in their faith through FaithChat. Start your free trial today with no commitment.</p>
-            <a href="payment.html?plan=monthly" class="cta-button" id="bottom-cta">Start 1-Week Free Trial</a>
+            <p>Join thousands of believers who are growing in their faith through FaithChat. Get started today.</p>
+            <a href="payment.html?plan=monthly" class="cta-button" id="bottom-cta">Get Started</a>
         </div>
     </section>
 
@@ -806,8 +880,8 @@
                     <h3>FaithChat</h3>
                     <p>Your AI-powered Bible study companion helping you discover biblical truth in seconds.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><img src="twitter.png" alt="Twitter"></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
@@ -857,6 +931,33 @@
                 console.error('Error tracking visitor:', error);
             }
         }
+    </script>
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                },
+            },
+        });
     </script>
 </body>
 </html>
