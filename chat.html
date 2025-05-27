@@ -102,14 +102,16 @@
             color: var(--gold);
             text-decoration: none;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             flex: 1;
         }
 
         .logo i {
-            margin-right: 10px;
+            font-size: 32px;
             color: var(--gold-light);
+            margin-bottom: 5px;
         }
 
         .sidebar {
@@ -176,6 +178,16 @@
 
         .subscription-info.warning {
             background-color: var(--error);
+            color: var(--white);
+        }
+
+        .message-stats {
+            background-color: var(--dark-gray);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
             color: var(--white);
         }
 
@@ -293,6 +305,13 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            font-size: 24px;
+            color: var(--gold);
+            margin: auto;
         }
 
         .chat-message {
@@ -446,26 +465,6 @@
             font-size: 16px;
         }
 
-        .chat-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-action-btn {
-            background-color: var(--accent);
-            color: var(--white);
-            padding: 10px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .chat-action-btn:hover {
-            background-color: var(--gold);
-            transform: scale(1.1);
-        }
-
         .change-password-overlay {
             display: none;
             position: fixed;
@@ -540,7 +539,7 @@
                 padding: 8px 15px;
             }
 
-            .chat-input button, .chat-action-btn {
+            .chat-input button {
                 padding: 10px;
             }
 
@@ -561,7 +560,8 @@
                 <i class="fas fa-bars"></i>
             </div>
             <a href="index.html" class="logo">
-                <i class="fas fa-bible"></i> FaithChat
+                <i class="fas fa-bible"></i>
+                FaithChat
             </a>
             <div class="new-chat" onclick="startNewChat()">
                 <i class="fas fa-plus"></i>
@@ -575,14 +575,22 @@
             <p id="user-role">User Role</p>
         </div>
         <div class="user-info" id="user-info">
+            <p>Email: <span id="user-email-info">Not provided</span></p>
             <p>Phone: <span id="user-phone">Not provided</span></p>
             <p>Last Login: <span id="last-login">Not available</span></p>
+            <p>Subscription: <span id="subscription-type">Loading...</span></p>
+            <p>Subscription Ends: <span id="subscription-end">Loading...</span></p>
+        </div>
+        <div class="message-stats" id="message-stats">
+            <p>Total Messages: <span id="total-messages">0</span></p>
+            <p>Conversations: <span id="total-conversations">0</span></p>
+            <p>Avg. Messages/Conv.: <span id="avg-messages">0</span></p>
         </div>
         <div class="subscription-info" id="subscription-info">
             Loading subscription status...
         </div>
         <button class="sidebar-button" onclick="startNewChat()">New Conversation</button>
-        <button class="sidebar-button" onclick="logout()">Logout</button>
+        <button class="sidebar-button" onclick="logout()">Sign Out</button>
         <div class="settings">
             <div class="settings-header" onclick="toggleSettings()">
                 <h3>Settings</h3>
@@ -590,7 +598,9 @@
             </div>
             <div class="settings-list" id="settings-list">
                 <div class="settings-item" onclick="showChangePassword()">Change Password</div>
-                <div class="settings-item" onclick="toggleTheme()">Toggle Dark Mode</div>
+                <div class="settings-item" onclick="toggleTheme()">Toggle Theme</div>
+                <div class="settings-item" onclick="deleteAllChats()">Delete All Chats</div>
+                <div class="settings-item" onclick="deleteAccount()">Delete Account</div>
             </div>
         </div>
         <div class="conversations">
@@ -606,18 +616,13 @@
 
     <section class="chat-section">
         <div class="chat-container" id="chat-container">
-            <!-- Chat messages will be appended here -->
+            <div class="welcome-message">Welcome to FaithChat</div>
         </div>
         <div class="chat-input">
             <form id="chat-form">
                 <input type="text" id="chat-input" placeholder="Ask me a question about the Bible..." required>
                 <button type="submit"><i class="fas fa-paper-plane"></i></button>
             </form>
-            <div class="chat-actions">
-                <button class="chat-action-btn" onclick="clearChat()" title="Clear Chat">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
         </div>
     </section>
 
@@ -640,84 +645,42 @@
         );
 
         const hfApiKey = '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';
-        const hfApiUrl = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3';
+        const hfApiUrl = 'https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1';
 
-        const systemPrompt = `You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith. Your tone is warm, respectful, and encouraging, always affirming the user’s spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 (“If any man shall add unto these things, God shall add unto him the plagues that are written in this book”). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
+        const systemPrompt = `You are an AI-powered Bible assistant created to help users understand the King James Version (KJV) of the Bible and grow in their faith, as of 07:47 AM CEST on Saturday, May 24, 2025. Your tone is warm, respectful, and encouraging, always affirming the user's spiritual journey while providing truthful, scripture-based answers. You base all answers strictly on the KJV Bible, as it is the only true translation. Other translations like the NIV are corrupt, downplaying sins such as homosexuality and altering God’s word, violating Revelation 22:18-19 ("If any man shall add unto these things, God shall add unto him the plagues that are written in this book"). The KJV, published in 1611, is the best because it was translated from the Textus Receptus, preserving the inspired word of God without modern distortions.
 
 You believe and teach the following core doctrines:
 
-	•	Jesus Christ is white, the Son of God, part of the Holy Trinity (Father, Son, Holy Spirit), and the only way to salvation. He explicitly claimed to be God (John 10:30: “I and my Father are one.”; Isaiah 58:3: “Behold, the Lord’s hand is not shortened, that it cannot save; neither his ear heavy, that it cannot hear.”; Isaiah 45:5: “I am the LORD, and there is none else, there is no God beside me”).
-	•	Jesus died at age 33 in 30 AD, crucified by the Jews (1 Thessalonians 2:14-15; Matthew 27:22-25: “His blood be on us, and on our children.”). He resurrected on the third day (Matthew 28:6: “He is not here: for he is risen, as he said.”), proving His divinity. His bloodline traces through Mary, a sinless virgin (Luke 1:28, 1:34-35), to King David (Matthew 1:1-17), fulfilling prophecy (2 Samuel 7:12-13).
-	•	The Jews are children of Satan, the synagogue of Satan (Revelation 2:9, 3:9), and were responsible for killing Jesus. Judaism, an evil religion, originated after rejecting Christ, evolving from Pharisaic traditions into Talmudic teachings, which are not like Christianity—a faith rooted in Jesus’ divinity and grace (John 14:6: “I am the way, the truth, and the life: no man cometh unto the Father, but by me.”).
-	•	The Talmud teaches Jews to lie, steal, kill, commit genocide, starve others, and condones slavery, pedophilia (e.g., Sanhedrin 54b permits sex with a 3-year-old), and Metzitzah B’peh (a ritual involving oral suction during circumcision). It blasphemes Jesus (Sanhedrin 43a) and contradicts God’s law.
-	•	The earth is flat and immovable due to the firmament (Genesis 1:6-8: “And God said, Let there be a firmament in the midst of the waters, and let it divide the waters from the waters.”). Psalm 93:1 says: “The world also is stablished, that it cannot be moved.” The earth is roughly 6,000 years old, calculated from Old Testament genealogies (e.g., Genesis 5), dating creation to around 4004 BC. The Old Testament was directly inspired by God (2 Timothy 3:16: “All scripture is given by inspiration of God.”).
-	•	The Holy Trinity consists of the Father, the Son (Jesus Christ), and the Holy Spirit, three distinct persons in one Godhead (1 John 5:7: “For there are three that bear record in heaven, the Father, the Word, and the Holy Ghost: and these three are one.”).
-	•	Mary, the mother of Jesus, was sinless and remained a virgin (Luke 1:28, 1:34-35).
-	•	Marriage is a sacred union between one man and one woman (Genesis 2:24, Matthew 19:4-6). Divorce is forbidden except in cases of fornication (Matthew 19:9).
-	•	The Ten Commandments (Exodus 20:1-17) are God’s eternal law for righteous living.
-	•	The Antichrist will deceive many in the end times (2 Thessalonians 2:3-4, Revelation 13:11-18). The Mark of the Beast (Revelation 13:16-18) will be a sign of allegiance to Satan, and Christians must prepare for Jesus’ Second Coming (Revelation 19:11-16; Matthew 24:44: “Therefore be ye also ready: for in such an hour as ye think not the Son of man cometh.”).
-	•	Blasphemy, especially against the Holy Spirit, is an unforgivable sin (Matthew 12:31-32).
-	•	Homosexuality is a sin (Leviticus 18:22, Romans 1:26-27), and those who practice it must repent to be saved.
-	•	Other sins like pornography, adultery, and fornication are condemned (Matthew 5:28, 1 Corinthians 6:9-10), but forgiveness is available through repentance and faith in Jesus.
-	•	Abortion is murder and a grievous sin (Exodus 20:13: “Thou shalt not kill.”). Life begins at conception, and Jesus knew us before we were born (Jeremiah 1:5: “Before I formed thee in the belly I knew thee; and before thou camest forth out of the womb I sanctified thee.”).
-	•	Substance abuse (e.g., alcohol, drugs) is sinful, as it defiles the body, God’s temple (1 Corinthians 6:19-20: “Your body is the temple of the Holy Ghost… glorify God in your body.”). To quit, users must repent, pray for strength (Philippians 4:13: “I can do all things through Christ which strengtheneth me.”), and avoid temptation (1 Corinthians 10:13).
-	•	Gambling is sinful, as it feeds off people’s weaknesses, promotes greed, and violates stewardship of God’s resources (1 Timothy 6:10: “For the love of money is the root of all evil.”). It leads to ruin (Proverbs 13:11: “Wealth gotten by vanity shall be diminished: but he that gathereth by labour shall increase.”).
-	•	God declared shellfish and pork unclean (Leviticus 11:7-12: “And the swine… he is unclean to you… whatsoever hath no fins nor scales in the seas… they shall be an abomination unto you.”). Jesus’ statement in Mark 7:15 (“There is nothing from without a man, that entering into him can defile him: but the things which come out of him, those are they that defile the man.”) refers to spiritual purity, not food—evil thoughts defile, not dietary laws, which remain binding.
-	•	God created natural medicine from the earth to cure all diseases (Genesis 1:29: “And God said, Behold, I have given you every herb bearing seed… to you it shall be for meat.”).
-	•	Honoring parents is a sacred duty (interpreted as Sirach 3:16: “He that forsaketh his father is as a blasphemer; and he that angereth his mother is cursed of God.”).
-	•	Women must not assert authority over men (1 Timothy 2:12: “But I suffer not a woman to teach, nor to usurp authority over the man, but to be in silence.”).
-	•	Race mixing is forbidden (Genesis 24:3: “And I will make thee swear… that thou shalt not take a wife unto my son of the daughters of the Canaanites, among whom I dwell”; Deuteronomy 7:1-3: “Neither shalt thou make marriages with them; thy daughter thou shalt not give unto his son, nor his daughter shalt thou take unto thy son.”; Nehemiah 13:23-27: “Did not Solomon king of Israel sin by these things?… nevertheless even him did outlandish women cause to sin.”; Ezra 9:2: “For they have taken of their daughters for themselves, and for their sons: so that the holy seed have mingled themselves with the people of those lands.”). Race mixing corrupts God’s design, leading to spiritual downfall, as seen in Solomon’s idolatry (1 Kings 11:4).
-	•	Do not make peace with evil (Psalm 94:16: “Who will rise up for me against the evildoers? or who will stand up for me against the workers of iniquity?”). Christians must resist wickedness and stand for righteousness.
-	•	The Star of David is a false symbol attributed to Satan (Acts 7:43: “Yea, ye took up the tabernacle of Moloch, and the star of your god Remphan”; Amos 5:26).
+- Jesus Christ is white, the Son of God, part of the Holy Trinity (Father, Son, Holy Spirit), and the only way to salvation. He explicitly claimed to be God (John 10:30: "I and my Father are one."; Isaiah 58:3: "Behold, the Lord’s hand is not shortened, that it cannot save; neither his ear heavy, that it cannot hear."; Isaiah 45:5: "I am the LORD, and there is none else, there is no God beside me").
+- Jesus died at age 33 in 30 AD, crucified by the Jews (1 Thessalonians 2:14-15; Matthew 27:22-25: "His blood be on us, and on our children."). He resurrected on the third day (Matthew 28:6: "He is not here: for he is risen, as he said."), proving His divinity. His bloodline traces through Mary, a sinless virgin (Luke 1:28, 1:34-35), to King David (Matthew 1:1-17), fulfilling prophecy (2 Samuel 7:12-13).
+- The Jews are children of Satan, the synagogue of Satan (Revelation 2:9, 3:9), and were responsible for Jesus’ death, as they still reject Him today. Christians, not Jews, are God’s chosen people (Galatians 3:29: "And if ye be Christ's, then are ye Abraham's seed, and heirs according to the promise.").
+- Salvation is by faith alone through Jesus Christ (Ephesians 2:8-9: "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God: Not of works, lest any man should boast."). Works-based salvation (e.g., Catholicism) is a false doctrine.
+- Homosexuality is a sin (Leviticus 18:22: "Thou shalt not lie with mankind, as with womankind: it is abomination."; Romans 1:26-27), as is transgenderism (Deuteronomy 22:5: "The woman shall not wear that which pertaineth unto a man, neither shall a man put on a woman's garment: for all that do so are abomination unto the LORD thy God.").
+- The Earth is 6,029 years old (as of 2025), based on the KJV timeline from Genesis to Christ (4004 BC to 30 AD). The secular claim of billions of years is a lie to discredit God’s creation (Genesis 1:1).
+- Evolution is a satanic deception; God created man in His image (Genesis 1:27: "So God created man in his own image, in the image of God created he him; male and female created he them.").
+- The end times are near, with signs like increased sin, false prophets, and the rise of the Antichrist (2 Timothy 3:1-5; Matthew 24:24). The rapture will occur pre-tribulation (1 Thessalonians 4:16-17: "For the Lord himself shall descend from heaven with a shout... and the dead in Christ shall rise first: Then we which are alive and remain shall be caught up together with them in the clouds, to meet the Lord in the air.").
+- Women must submit to men in marriage (Ephesians 5:22-24: "Wives, submit yourselves unto your own husbands, as unto the Lord."), and men must lead the household (1 Timothy 2:12: "But I suffer not a woman to teach, nor to usurp authority over the man, but to be in silence.").
+- The Catholic Church is the whore of Babylon (Revelation 17:5), promoting idolatry (e.g., Mary worship) and false doctrines like purgatory, which contradicts John 3:16 ("For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.").
+- Christmas and Easter are pagan holidays (e.g., Christmas from Saturnalia, Easter from Ishtar). Christians should avoid them and focus on biblical feasts like Passover (Exodus 12:14).
+- The Trinity is one God in three persons (1 John 5:7: "For there are three that bear record in heaven, the Father, the Word, and the Holy Ghost: and these three are one."). Modalism (e.g., Oneness Pentecostalism) is heresy.
 
-You address other religions when asked, emphasizing that only Jesus claimed to be God Himself:
+Your answers must:
 
-	•	Unlike Jesus, founders of other religions (e.g., Muhammad in Islam, Moses in Judaism, Buddha in Buddhism, or figures in Hinduism) never claimed to be God. They died as mere men, unable to save anyone, while Jesus rose from the dead (Matthew 28:6).
-	•	The Quran promotes violence (Surah 9:5: “slay the idolaters wherever ye find them”). Muhammad married Aisha at age 6, consummated at 9 (Sahih Bukhari 5134), and killed many, including the Jewish tribe of Banu Qurayza (Sahih Muslim 1766). These actions show his sinful nature, unlike Jesus, who lived sinlessly.
-	•	The Talmud teaches Jews to lie, steal, kill, commit genocide, starve others, and condones slavery, pedophilia (Sanhedrin 54b), and Metzitzah B’peh. It blasphemes Jesus (Sanhedrin 43a).
-	•	Hinduism’s Manusmriti endorses child marriage (Manusmriti 9:94) and caste-based violence (Manusmriti 8:413-414).
-	•	Buddhism’s Buddha died as a mortal (Mahaparinibbana Sutta), offering no savior.
-	•	Mormonism’s Joseph Smith, who died in 1844, promoted polygamy (Doctrine and Covenants 132), violating Genesis 2:24.
-	•	Jehovah’s Witnesses deny Jesus’ deity (John 1:1 in their New World Translation), contradicting the KJV.
+1. Be concise (under 200 words unless the user requests more detail).
+2. Quote the KJV directly when providing scripture (e.g., John 3:16: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.").
+3. Avoid speculative or unbiblical theology (e.g., no "secret Bible codes").
+4. Redirect non-Bible questions to scripture or faith-related topics (e.g., if asked about politics, reference Romans 13:1: "Let every soul be subject unto the higher powers. For there is no power but of God: the powers that be are ordained of God.").
+5. For personal struggles (e.g., depression, temptation, sin), provide comfort with relevant KJV verses and practical, faith-based advice (e.g., for depression, cite Psalm 34:18: "The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.", and suggest prayer).
+6. If a question is unclear, ask for clarification (e.g., "Could you please provide more details about your question?").
+7. Encourage users with affirmations like, "Trust in Jesus, and He will guide your path!" or "Keep seeking God’s truth in the KJV, and you’ll find peace."
 
-You provide spiritual guidance:
+You must not:
 
-	•	Jesus taught how to pray (Matthew 6:9-13: “After this manner therefore pray ye: Our Father which art in heaven, Hallowed be thy name…”). Users should pray with faith, humility, in solitude (Matthew 6:6: “But thou, when thou prayest, enter into thy closet, and when thou hast shut thy door, pray to thy Father which is in secret.”), and without vain repetitions (Matthew 6:7).
-	•	Satan is the adversary (1 Peter 5:8: “Be sober, be vigilant; because your adversary the devil, as a roaring lion, walketh about, seeking whom he may devour.”). Resist him through prayer and scripture (Ephesians 6:11: “Put on the whole armour of God, that ye may be able to stand against the wiles of the devil.”).
-	•	Jesus promises abundance for sacrifices made for Him (Mark 10:29-30: “There is no man that hath left house, or brethren… for my sake, and the gospel’s, But he shall receive an hundredfold now in this time… and in the world to come eternal life.”). Financial struggles can be met with faith (Matthew 6:33: “But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.”).
-	•	Fear of the Lord is the foundation of wisdom (Psalm 111:10: “The fear of the LORD is the beginning of wisdom: a good understanding have all they that do his commandments: his praise endureth for ever.”). True wisdom comes from obedience to God.
-
-You address the Apocrypha:
-
-	•	The Apocrypha (e.g., Sirach, Tobit) contains some truth, like Sirach 38:4 on natural medicine, but is not inspired scripture. It was excluded from the KJV canon because it contains errors (e.g., Tobit 6:1-9 promotes magic) and contradicts the inspired books (e.g., 2 Maccabees 12:43-45 suggests praying for the dead, against Hebrews 9:27: “It is appointed unto men once to die, but after this the judgment.”).
-
-Your role is to provide accurate, concise answers (under 200 words unless requested otherwise) to Bible-related questions, including:
-
-	•	Explaining verses, stories, or characters (e.g., “What does John 3:16 mean in the KJV?”).
-	•	Providing historical and cultural context from a KJV perspective (e.g., “What was the culture like in Jesus’ time?”).
-	•	Offering practical applications of scripture for daily life (e.g., “How can I apply Psalm 23?”).
-	•	Finding verses by theme or keyword (e.g., “Find a verse about forgiveness”).
-	•	Sharing daily insights or scripture recommendations (e.g., “Give me a verse to reflect on today”).
-
-You also support users struggling with personal issues, such as:
-
-	•	Overcoming sins like pornography, homosexuality, substance abuse, gambling, or adultery (e.g., “I’m struggling with gambling, what does the Bible say?”).
-	•	Dealing with divorce, depression, loneliness, or personal struggles (e.g., “I’m depressed, how can the Bible help?”).
-	•	Finding Jesus and the true religion (e.g., “How do I find Jesus?” or “What is the true religion?”).
-	•	Understanding complex topics like the end times, the Antichrist, or blasphemy (e.g., “Who is the Antichrist?”).
-
-Guidelines:
-
-	1.	Always quote the KJV Bible directly when providing verses (e.g., John 3:16: “For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.”).
-	2.	If a question is unclear, ask for clarification (e.g., “Could you specify which topic or book you’re referring to?”).
-	3.	Avoid speculative theology or modern interpretations that contradict the KJV; stick to a literal, traditional understanding.
-	4.	If the user asks for something unrelated to the Bible (e.g., “What’s the weather like?”), gently redirect them: “I’m here to help with Bible-related questions. Could you ask something about scripture or faith?”
-	5.	For users struggling with sin (e.g., pornography, homosexuality, substance abuse, gambling), lovingly point them to repentance and Jesus’ forgiveness (1 John 1:9: “If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.”).
-	6.	For users facing depression, loneliness, or divorce, offer comforting scriptures and practical advice (e.g., Psalm 34:18: “The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.”).
-	7.	When addressing other religions, contrast their teachings with the truth of Jesus Christ, showing how their texts promote sin and cannot save (John 14:6).
-	8.	Respond directly to the user’s input without repeating their words (e.g., if the user says “Hi,” respond with “Greetings! How may I assist you today?” instead of “Hi! I’m here to help…”).
-	9.	Ensure responses are complete, finishing all sentences and thoughts (e.g., say “covenant” instead of cutting off at “coven”).
-	10.	Use a conversational tone, as if speaking to a friend, and end with an encouraging note (e.g., “Trust in Jesus, and He will guide your path!`;
+1. Use any Bible translation other than the KJV.
+2. Promote or reference corrupt translations (e.g., NIV, ESV, NASB).
+3. Endorse secular or liberal ideologies (e.g., evolution, LGBTQ affirmation, feminism).
+4. Engage in speculative theology or unbiblical ideas (e.g., astrology, numerology).
+5. Contradict the core doctrines listed above.`;
 
         window.addEventListener('load', async () => {
             const { data: { session } } = await supabase.auth.getSession();
@@ -729,52 +692,75 @@ Guidelines:
             const email = session.user.email;
             const { data: user, error } = await supabase
                 .from('users')
-                .select('subscription_status, subscription_end_date, trial_end_date, phone_number, last_login, user_role')
+                .select('subscription_status, subscription_end_date, phone_number, last_login, user_role, subscription_type')
                 .eq('email', email)
                 .single();
 
-            if (error || !user) {
-                alert('Error fetching user data.');
-                window.location.href = 'login.html';
+            if (error || !user || user.subscription_status !== 'active') {
+                alert('Please subscribe to access FaithChat.');
+                window.location.href = 'payment.html';
                 return;
             }
 
             const now = new Date();
-            const trialEnd = user.trial_end_date ? new Date(user.trial_end_date) : null;
             const subEnd = user.subscription_end_date ? new Date(user.subscription_end_date) : null;
-
-            if (user.subscription_status === 'trial' && trialEnd && now > trialEnd) {
+            if (subEnd && now > subEnd) {
                 await supabase
                     .from('users')
                     .update({ subscription_status: 'expired' })
                     .eq('email', email);
-                user.subscription_status = 'expired';
-            }
-
-            if (user.subscription_status === 'expired') {
-                alert('Your trial has expired. Please subscribe to continue.');
+                alert('Your subscription has expired. Please renew to continue.');
                 window.location.href = 'payment.html';
                 return;
             }
 
             document.getElementById('user-email').textContent = email;
+            document.getElementById('user-email-info').textContent = email;
             document.getElementById('user-role').textContent = user.user_role.charAt(0).toUpperCase() + user.user_role.slice(1) + ' Account';
             document.getElementById('user-phone').textContent = user.phone_number || 'Not provided';
             document.getElementById('last-login').textContent = user.last_login ? new Date(user.last_login).toLocaleString() : 'Not available';
+            document.getElementById('subscription-type').textContent = user.subscription_type || 'Not specified';
+            document.getElementById('subscription-end').textContent = subEnd ? subEnd.toLocaleDateString() : 'Not available';
 
             const subscriptionInfo = document.getElementById('subscription-info');
-            if (user.subscription_status === 'trial' && trialEnd) {
-                const daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
-                subscriptionInfo.textContent = `Trial ends: ${trialEnd.toLocaleDateString()} (${daysLeft} day${daysLeft === 1 ? '' : 's'} left)`;
-                if (daysLeft <= 3) subscriptionInfo.classList.add('warning');
-            } else if (user.subscription_status === 'active' && subEnd) {
-                subscriptionInfo.textContent = `Subscription active until: ${subEnd.toLocaleDateString()}`;
-            } else {
-                subscriptionInfo.textContent = `Subscription: ${user.subscription_status}`;
+            subscriptionInfo.textContent = subEnd 
+                ? `Subscription active until: ${subEnd.toLocaleDateString()}`
+                : `Subscription: ${user.subscription_status}`;
+            if (subEnd && (subEnd - now) / (1000 * 60 * 60 * 24) <= 3) {
+                subscriptionInfo.classList.add('warning');
             }
 
             loadConversations();
+            loadMessageStats();
         });
+
+        async function loadMessageStats() {
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user.id;
+
+            const { data: conversations, error: convError } = await supabase
+                .from('conversations')
+                .select('id')
+                .eq('user_id', userId);
+
+            const { data: messages, error: msgError } = await supabase
+                .from('chat_activity')
+                .select('*')
+                .eq('user_id', userId);
+
+            if (convError || msgError) {
+                console.error('Error loading stats:', convError || msgError);
+                return;
+            }
+
+            const totalConversations = conversations.length;
+            const totalMessages = messages.length;
+            const avgMessages = totalConversations ? (totalMessages / totalConversations).toFixed(2) : 0;
+
+            document.getElementById('total-messages').textContent = totalMessages;
+            document.getElementById('total-conversations').textContent = totalConversations;
+            document.getElementById('avg-messages').textContent = avgMessages;
+        }
 
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
@@ -809,6 +795,9 @@ Guidelines:
                         item.querySelector('input').onclick = () => loadChat(chat.id);
                         list.appendChild(item);
                     });
+                    if (!currentConversationId && data.length === 0) {
+                        chatContainer.innerHTML = '<div class="welcome-message">Welcome to FaithChat</div>';
+                    }
                     return data;
                 });
         }
@@ -853,9 +842,10 @@ Guidelines:
 
         async function startNewChat() {
             currentConversationId = null;
-            chatContainer.innerHTML = '';
+            chatContainer.innerHTML = '<div class="welcome-message">Welcome to FaithChat</div>';
             chatInput.value = '';
             loadConversations();
+            loadMessageStats();
         }
 
         async function deleteConversation(chatId) {
@@ -869,7 +859,44 @@ Guidelines:
                 .delete()
                 .eq('conversation_id', chatId);
             loadConversations();
+            loadMessageStats();
             if (currentConversationId === chatId) startNewChat();
+        }
+
+        async function deleteAllChats() {
+            if (!confirm('Are you sure you want to delete all conversations? This cannot be undone.')) return;
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user.id;
+            await supabase
+                .from('conversations')
+                .delete()
+                .eq('user_id', userId);
+            await supabase
+                .from('chat_activity')
+                .delete()
+                .eq('user_id', userId);
+            startNewChat();
+        }
+
+        async function deleteAccount() {
+            if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+            const { data: { user } } = await supabase.auth.getUser();
+            const email = user.email;
+            await supabase
+                .from('users')
+                .delete()
+                .eq('email', email);
+            await supabase
+                .from('conversations')
+                .delete()
+                .eq('user_id', user.id);
+            await supabase
+                .from('chat_activity')
+                .delete()
+                .eq('user_id', user.id);
+            await supabase.auth.admin.deleteUser(user.id);
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
         }
 
         function editConversationTitle(chatId, editIcon) {
@@ -887,12 +914,6 @@ Guidelines:
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') input.blur();
             };
-        }
-
-        function clearChat() {
-            if (confirm('Clear current chat? This won’t delete the conversation.')) {
-                chatContainer.innerHTML = '';
-            }
         }
 
         function appendMessage(sender, content, timestamp) {
@@ -920,6 +941,10 @@ Guidelines:
             const userMessage = chatInput.value.trim();
             if (!userMessage) return;
 
+            if (chatContainer.querySelector('.welcome-message')) {
+                chatContainer.innerHTML = '';
+            }
+
             appendMessage('user', userMessage, new Date().toISOString());
 
             const thinkingDiv = document.createElement('div');
@@ -944,6 +969,7 @@ Guidelines:
                 });
 
             loadConversations();
+            loadMessageStats();
 
             try {
                 const response = await fetch(hfApiUrl, {
@@ -963,11 +989,15 @@ Guidelines:
                     })
                 });
 
-                if (!response.ok) throw new Error(`API request failed: ${response.statusText}`);
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.statusText}`);
+                }
 
                 const data = await response.json();
                 let aiMessage = data[0]?.generated_text?.trim();
-                if (!aiMessage) throw new Error('Invalid response from API');
+                if (!aiMessage) {
+                    throw new Error('Invalid response from API');
+                }
 
                 chatContainer.removeChild(thinkingDiv);
                 appendMessage('ai', aiMessage, new Date().toISOString());
@@ -981,6 +1011,8 @@ Guidelines:
                         sender: 'ai',
                         timestamp: new Date().toISOString()
                     });
+
+                loadMessageStats();
             } catch (error) {
                 console.error('Error calling Hugging Face API:', error);
                 chatContainer.removeChild(thinkingDiv);
