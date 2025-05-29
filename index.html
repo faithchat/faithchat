@@ -138,8 +138,8 @@
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero-image.png') no-repeat center center/cover;
-            width: 100%; /* Full width, touches edges */
-            height: 60vh; /* Reasonable height, not square */
+            width: 100%;
+            height: 60vh;
             display: flex;
             align-items: center;
             text-align: center;
@@ -252,6 +252,44 @@
         }
         
         .feature-card p {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        .features-cta {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        /* Trusted Section */
+        .trusted {
+            padding: 30px 0;
+            background-color: var(--white);
+            text-align: center;
+        }
+        
+        .trusted-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .trusted-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+        }
+        
+        .trusted-item h3 {
+            font-size: 30px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        
+        .trusted-item p {
             color: var(--dark-gray);
             font-size: 14px;
         }
@@ -551,7 +589,7 @@
             }
             
             .hero {
-                height: 50vh; /* Slightly shorter on mobile */
+                height: 50vh;
                 padding: 20px;
             }
             
@@ -570,6 +608,10 @@
             
             .secondary-button {
                 display: none;
+            }
+            
+            .trusted-grid {
+                flex-direction: column;
             }
             
             .features-grid {
@@ -648,7 +690,7 @@
             <h1>Discover Biblical Truth <span>in Seconds</span> with AI</h1>
             <p>Get instant, accurate answers to all your Bible questions. Our AI-powered platform helps you understand scripture like never before.</p>
             <div class="hero-buttons">
-                <a href="payment.html?plan=monthly" class="cta-button" id="hero-cta">Get Started</a>
+                <a href="payment.html?plan=monthly" class="cta-button" id="hero-cta">Start Free Trial</a>
                 <button class="secondary-button">See How It Works</button>
             </div>
         </div>
@@ -659,9 +701,16 @@
         <div class="container">
             <div class="section-title">
                 <h2>Powerful Bible Study Tools</h2>
-                <p>FaithChat combines artificial intelligence with biblical scholarship to give you the most comprehensive study experience.</p>
+                <p>FaithChat’s AI, custom-trained on authentic biblical texts, combines artificial intelligence with biblical scholarship to give you the most comprehensive study experience.</p>
             </div>
             <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Custom-Trained AI</h3>
+                    <p>Our AI is trained on authentic biblical texts, ensuring accurate and trustworthy answers grounded in scripture.</p>
+                </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-robot"></i>
@@ -701,8 +750,39 @@
                     <div class="feature-icon">
                         <i class="fas fa-mobile-alt"></i>
                     </div>
-                    <h3>Anywhere Access</h3>
-                    <p>Study on the go with our mobile-friendly platform that works on all your devices.</p>
+                    <h3>Offline Access</h3>
+                    <p>Study scripture anytime, anywhere with full offline Bible reading and AI functionality.</p>
+                </div>
+            </div>
+            <div class="features-cta">
+                <a href="payment.html?plan=free-trial" class="cta-button">Start Your Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trusted Section -->
+    <section class="trusted" id="trusted">
+        <div class="container">
+            <div class="section-title">
+                <h2>Trusted by Thousands Worldwide</h2>
+                <p>Join a global community of believers deepening their faith with FaithChat’s AI-powered insights.</p>
+            </div>
+            <div class="trusted-grid">
+                <div class="trusted-item">
+                    <h3>250K+</h3>
+                    <p>Users growing in faith</p>
+                </div>
+                <div class="trusted-item">
+                    <h3>10M+</h3>
+                    <p>Questions answered</p>
+                </div>
+                <div class="trusted-item">
+                    <h3>80+</h3>
+                    <p>Countries reached</p>
+                </div>
+                <div class="trusted-item">
+                    <h3>150K+</h3>
+                    <p>Curated biblical insights</p>
                 </div>
             </div>
         </div>
