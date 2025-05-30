@@ -37,13 +37,75 @@
         }
         
         /* Announcement Bar */
-        .announcement-bar {
-            background-color: var(--gold);
-            color: var(--white);
-            padding: 8px 0;
-            text-align: center;
-            font-weight: 600;
+        .announcement-bar-section {
             position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+            font-size: 16px;
+            line-height: 1.5;
+            z-index: 1000;
+        }
+
+        .announcement-bar {
+            display: none;
+            text-align: center;
+            padding: 12px 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .announcement-bar.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .announcement-bar__message {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .announcement-bar__message span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .countdown-timer {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 700;
+            color: var(--black);
+            background: var(--white);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .emoji {
+            font-size: 1.2rem;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .announcement-bar__message {
+                font-size: 0.9rem;
+            }
+
+            .announcement-bar {
+                padding: 10px 15px;
+            }
+
+            .emoji {
+                font-size: 1rem;
+            }
         }
         
         /* Header Styles */
@@ -396,6 +458,17 @@
             font-weight: 600;
             font-size: 14px;
         }
+
+        .guarantee-badge {
+            display: inline-block;
+            background-color: var(--gold-light);
+            color: var(--black);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
         
         .pricing-card h3 {
             font-size: 22px;
@@ -631,23 +704,13 @@
             .pricing-card {
                 max-width: 350px;
             }
-            
-            .announcement-slide {
-                white-space: normal;
-            }
         }
         
         /* Animation */
         @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
         
         .floating {
@@ -660,8 +723,32 @@
     <img src="/track-pixel" style="display: none;" onload="trackVisitor()">
 
     <!-- Announcement Bar -->
-    <div class="announcement-bar">
-        <div class="announcement-slide">🌟 15% of All Proceeds Donated to Churches</div>
+    <div class="announcement-bar-section" role="region" aria-label="Announcement Bar">
+      <div class="announcement-bar" data-announcement-id="1">
+        <div class="page-width">
+          <p class="announcement-bar__message">
+            <span class="emoji">🌟</span>
+            <span>15% of All Proceeds Donated to Churches!</span>
+          </p>
+        </div>
+      </div>
+      <div class="announcement-bar" data-announcement-id="2">
+        <div class="page-width">
+          <p class="announcement-bar__message">
+            <span class="emoji">⏰</span>
+            <span>Get 1 Week Free! Offer Ends At Midnight!</span>
+            <span class="countdown-timer" id="countdown"></span>
+          </p>
+        </div>
+      </div>
+      <div class="announcement-bar" data-announcement-id="3">
+        <div class="page-width">
+          <p class="announcement-bar__message">
+            <span class="emoji">👤</span>
+            <span>Trusted by over 250k+ users!</span>
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Header -->
@@ -792,7 +879,7 @@
     <section class="testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
-                <h2>Trusted by Thousands</h2>
+                <h2>Hear from Our Users</h2>
                 <p>See how FaithChat is transforming Bible study for believers around the world.</p>
             </div>
             <div class="testimonials-list">
@@ -867,6 +954,7 @@
                     <div class="popular-badge">Most Popular</div>
                     <h3>Monthly Plan</h3>
                     <div class="price">$19.99<span>/month</span></div>
+                    <div class="guarantee-badge">30 Day Money Back Guarantee</div>
                     <div class="price-yearly">Billed monthly</div>
                     <ul class="pricing-features">
                         <li>Unlimited AI questions</li>
@@ -889,6 +977,7 @@
                     <h3>Yearly Plan</h3>
                     <div class="savings-badge">Save 20%</div>
                     <div class="price">$15.99<span>/month</span></div>
+                    <div class="guarantee-badge">30 Day Money Back Guarantee</div>
                     <div class="price-yearly">$191.88 billed annually</div>
                     <ul class="pricing-features">
                         <li>Everything in Monthly Plan</li>
@@ -979,6 +1068,47 @@
                 console.error('Error tracking visitor:', error);
             }
         }
+
+        // Announcement Bar Script
+        const announcements = document.querySelectorAll('.announcement-bar');
+        let currentIndex = 0;
+
+        function showAnnouncement(index) {
+            announcements.forEach((bar, i) => {
+                bar.classList.toggle('active', i === index);
+            });
+        }
+
+        function rotateAnnouncements() {
+            currentIndex = (currentIndex + 1) % announcements.length;
+            showAnnouncement(currentIndex);
+        }
+
+        showAnnouncement(currentIndex);
+        setInterval(rotateAnnouncements, 5000);
+
+        function updateCountdown() {
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+
+            const timeLeft = midnight - now;
+            if (timeLeft <= 0) {
+                midnight.setDate(midnight.getDate() + 1);
+            }
+
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            const countdownElement = document.getElementById('countdown');
+            if (countdownElement) {
+                countdownElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
