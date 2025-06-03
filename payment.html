@@ -235,11 +235,15 @@
             margin-bottom: 10px;
         }
         
-        .plan-card .savings {
+        .plan-card .savings, .plan-card .free-trial {
             font-size: 18px;
-            color: var(--gold-dark);
+            color: var(--black);
             margin-bottom: 15px;
             font-weight: 600;
+            display: inline-block;
+            background-color: var(--gold-light);
+            padding: 3px 10px;
+            border-radius: 20px;
         }
         
         .plan-card ul {
@@ -305,8 +309,14 @@
                 padding: 0 15px;
             }
             
+            .plan-container {
+                flex-direction: column; /* Stack plans vertically on mobile */
+                align-items: center;
+            }
+            
             .plan-card {
                 max-width: 100%;
+                margin-bottom: 20px; /* Add space between stacked cards */
             }
             
             .section-title h2 {
@@ -315,6 +325,22 @@
             
             .section-title p {
                 font-size: 16px;
+            }
+            
+            .plan-card .price {
+                font-size: 36px; /* Slightly smaller price font on mobile */
+            }
+            
+            .plan-card .price span {
+                font-size: 16px;
+            }
+            
+            .plan-card .billing, .plan-card .savings, .plan-card .free-trial {
+                font-size: 16px; /* Adjust badge font size for mobile */
+            }
+            
+            .plan-card ul li {
+                font-size: 14px; /* Smaller feature list font on mobile */
             }
         }
     </style>
@@ -354,6 +380,7 @@
                     <h3>Monthly Plan</h3>
                     <div class="price">$19.99<span>/month</span></div>
                     <div class="billing">Billed monthly</div>
+                    <div class="free-trial">7-Day Free Trial Included</div>
                     <ul>
                         <li><i class="fas fa-check"></i>Unlimited AI questions</li>
                         <li><i class="fas fa-check"></i>Detailed verse explanations</li>
@@ -363,8 +390,8 @@
                         <li><i class="fas fa-check"></i>Priority support</li>
                     </ul>
                     <stripe-buy-button
-                        buy-button-id="buy_btn_1RT5MaEzgnBQDubsijX3DfRM"
-                        publishable-key="pk_live_51RSu6rEzgnBQDubs285XDAGypaM1xvhcUcK4y02GxCg3wrJ3VrhsYAJqQuQav8sZg6esfNkkPS4q4Z9cAoMg14ZI00iUbYlL7r"
+                        buy-button-id="buy_btn_1RVxJNGdaY1gC6hEt29jo47Q"
+                        publishable-key="pk_live_51RVZRgGdaY1gC6hE4uHhr6wlhDnufZc9XBehRTkBpPpB4Sv879A4MJOR0VILWf77oI2oibFiIAX0XhWqOx6m2UwB003iGZzckG"
                     >
                     </stripe-buy-button>
                 </div>
@@ -373,6 +400,7 @@
                     <div class="price">$15.99<span>/month</span></div>
                     <div class="billing">$191.88 billed annually</div>
                     <div class="savings">Save 20% - $48/year!</div>
+                    <div class="free-trial">7-Day Free Trial Included</div>
                     <ul>
                         <li><i class="fas fa-check"></i>Everything in Monthly Plan</li>
                         <li><i class="fas fa-check"></i>Annual savings of $48</li>
@@ -382,8 +410,8 @@
                         <li><i class="fas fa-check"></i>Special member badge</li>
                     </ul>
                     <stripe-buy-button
-                        buy-button-id="buy_btn_1RT5O6EzgnBQDubsnrkK1saa"
-                        publishable-key="pk_live_51RSu6rEzgnBQDubs285XDAGypaM1xvhcUcK4y02GxCg3wrJ3VrhsYAJqQuQav8sZg6esfNkkPS4q4Z9cAoMg14ZI00iUbYlL7r"
+                        buy-button-id="buy_btn_1RVxRWGdaY1gC6hEEkMfoka8"
+                        publishable-key="pk_live_51RVZRgGdaY1gC6hE4uHhr6wlhDnufZc9XBehRTkBpPpB4Sv879A4MJOR0VILWf77oI2oibFiIAX0XhWqOx6m2UwB003iGZzckG"
                     >
                     </stripe-buy-button>
                 </div>
